@@ -12,6 +12,3 @@ start-frontend:
 
 start-backend:
 	npx start-server
-
-start:
-	npm run start
