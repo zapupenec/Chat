@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import { } from 'react-router-dom';
 import {
@@ -20,7 +20,7 @@ const signupSchema = yup.object().shape({
     .oneOf([yup.ref('password')], 'Пароли должны совпадать'),
 });
 
-const SignupPage = () => {
+export const SignupPage = () => {
   const inputRef = useRef(null);
   useEffect(() => {
     inputRef.current.focus();
@@ -33,7 +33,7 @@ const SignupPage = () => {
       confirmPassword: '',
     },
     validationSchema: signupSchema,
-    onSubmit: async (values) => {
+    onSubmit: async () => {
 
     },
   });
@@ -107,5 +107,3 @@ const SignupPage = () => {
     </Container>
   );
 };
-
-export default SignupPage;

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Image } from 'react-bootstrap';
 import notFoundImage from '../assets/notFound-image.svg';
 
-const NotFoundPage = () => (
+export const NotFoundPage = () => (
   <div className="text-center h-75">
     <Image className="h-50" src={notFoundImage} fluid alt="Страница не найдена" />
     <h1 className="h4 text-muted">Страница не найдена</h1>
@@ -12,5 +12,3 @@ const NotFoundPage = () => (
     </p>
   </div>
 );
-
-export default NotFoundPage;

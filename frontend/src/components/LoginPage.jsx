@@ -1,21 +1,19 @@
-// import axios from 'axios';
+import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Container, Row, Col, Card, Form, FloatingLabel, Button, Image,
 } from 'react-bootstrap';
-import routes from '../routes.js';
+import { routes } from '../routes.js';
+import { useAuth } from '../hooks/index.jsx';
 import loginImage from '../assets/login-image.jpg';
 
-const LoginPage = () => {
-  // const location = useLocation();
-  // const navigate = useNavigate();
+export const LoginPage = () => {
+  const navigate = useNavigate();
 
-  // const { logIn } = useAuth();
-  // const [authFailed, setAuthFailed] = useState(false);
-
-  const [authFailed, setAuthFailed] = useState(true);
+  const auth = useAuth();
+  const [authFailed, setAuthFailed] = useState(false);
 
   const inputRef = useRef(null);
   useEffect(() => {
@@ -30,12 +28,12 @@ const LoginPage = () => {
     onSubmit: async (values) => {
       setAuthFailed(false);
       try {
-        // const { data } = await axios.post(routes.loginPath(), values);
-        // logIn();
-        // localStorage.setItem('userId', JSON.stringify(data));
-        // navigate(location.state.from);
+        const { data } = await axios.post(routes.loginPath(), values);
+        auth.logIn();
+        localStorage.setItem('userId', JSON.stringify(data));
+        navigate('/');
       } catch (error) {
-        formik.setSubmitting(false);
+        // formik.setSubmitting(false);
         if (error.isAxiosError && error.response.status === 401) {
           setAuthFailed(true);
           inputRef.current.focus();
@@ -68,7 +66,7 @@ const LoginPage = () => {
                     value={formik.values.username}
                     onChange={formik.handleChange}
                     ref={inputRef}
-                    disabled={formik.isSubmitting}
+                    // disabled={formik.isSubmitting}
                     isInvalid={authFailed}
                   />
                 </FloatingLabel>
@@ -110,5 +108,3 @@ const LoginPage = () => {
     </Container>
   );
 };
-
-export default LoginPage;
