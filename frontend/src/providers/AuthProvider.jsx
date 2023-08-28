@@ -4,16 +4,15 @@ import {
 import { AuthContext } from '../contexts';
 
 const hasToken = () => {
-  const userId = JSON.parse(localStorage.getItem('userId'));
+  const userId = JSON.parse(localStorage.getItem('user'));
   return userId && userId.token;
 };
 
 export const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(hasToken());
-
   const logIn = useCallback(() => setLoggedIn(true), []);
   const logOut = useCallback(() => {
-    localStorage.removeItem('userId');
+    localStorage.removeItem('user');
     setLoggedIn(false);
   }, []);
 

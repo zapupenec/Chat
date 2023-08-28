@@ -28,6 +28,7 @@ rules:
   functional/functional-parameters: 0
   functional/no-conditional-statements: 0
   functional/no-expression-statements: 0
+  functional/no-throw-statements: 0
   functional/immutable-data: 0
   react/function-component-definition: [2, { "namedComponents": "arrow-function" }]
   jsx-quotes: ['warn']

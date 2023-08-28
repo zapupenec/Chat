@@ -5,7 +5,7 @@ import {
   Container, Row, Col, Card, Form, FloatingLabel, Button, Image,
 } from 'react-bootstrap';
 import * as yup from 'yup';
-import signupImage from '../assets/signup-image.jpg';
+import signupImage from '../assets/signup.jpg';
 
 const signupSchema = yup.object().shape({
   username: yup.string()
@@ -59,6 +59,7 @@ export const SignupPage = () => {
                     onChange={formik.handleChange}
                     required
                     ref={inputRef}
+                    disabled={formik.isSubmitting}
                     isValid={formik.touched.username && !formik.errors.username}
                     isInvalid={formik.touched.username && formik.errors.username}
                   />
@@ -75,6 +76,7 @@ export const SignupPage = () => {
                     value={formik.values.password}
                     onChange={formik.handleChange}
                     required
+                    disabled={formik.isSubmitting}
                     isValid={formik.touched.password && !formik.errors.password}
                     isInvalid={formik.touched.password && formik.errors.password}
                   />
@@ -91,6 +93,7 @@ export const SignupPage = () => {
                     value={formik.values.confirmPassword}
                     onChange={formik.handleChange}
                     required
+                    disabled={formik.isSubmitting}
                     isValid={formik.touched.confirmPassword && !formik.errors.confirmPassword}
                     isInvalid={formik.touched.confirmPassword && formik.errors.confirmPassword}
                   />
@@ -98,7 +101,14 @@ export const SignupPage = () => {
                     {formik.errors.confirmPassword}
                   </Form.Control.Feedback>
                 </FloatingLabel>
-                <Button variant="outline-primary" type="submit" className="w-100">Зарегистрироваться</Button>
+                <Button
+                  variant="outline-primary"
+                  type="submit"
+                  className="w-100"
+                  disabled={formik.isSubmitting}
+                >
+                  Зарегистрироваться
+                </Button>
               </Form>
             </Card.Body>
           </Card>

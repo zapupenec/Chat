@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Image } from 'react-bootstrap';
-import notFoundImage from '../assets/notFound-image.svg';
+import notFoundImage from '../assets/notFound.svg';
 
 export const NotFoundPage = () => (
   <div className="text-center h-75">

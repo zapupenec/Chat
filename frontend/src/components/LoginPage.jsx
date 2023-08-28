@@ -6,8 +6,8 @@ import {
   Container, Row, Col, Card, Form, FloatingLabel, Button, Image,
 } from 'react-bootstrap';
 import { routes } from '../routes.js';
-import { useAuth } from '../hooks/index.jsx';
-import loginImage from '../assets/login-image.jpg';
+import { useAuth } from '../hooks';
+import loginImage from '../assets/login.jpg';
 
 export const LoginPage = () => {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ export const LoginPage = () => {
       try {
         const { data } = await axios.post(routes.loginPath(), values);
         auth.logIn();
-        localStorage.setItem('userId', JSON.stringify(data));
+        localStorage.setItem('user', JSON.stringify(data));
         navigate('/');
       } catch (error) {
         // formik.setSubmitting(false);

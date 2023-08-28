@@ -7,7 +7,7 @@ import {
 } from 'react-bootstrap';
 
 import {
-  AuthButton, LoggedInRoute, LoginPage, NotFoundPage, PrivateRoute, SignupPage,
+  AuthButton, ChatPage, LoggedInRoute, LoginPage, NotFoundPage, PrivateRoute, SignupPage,
 } from './components';
 
 import { AuthProvider } from './providers';
@@ -23,7 +23,7 @@ export const App = () => (
           </Container>
         </Navbar>
         <Routes>
-          <Route path="/" element={<PrivateRoute><div>Тут будет чат</div></PrivateRoute>} />
+          <Route path="/" element={<PrivateRoute><ChatPage /></PrivateRoute>} />
           <Route path="/login" element={<LoggedInRoute><LoginPage /></LoggedInRoute>} />
           <Route path="/signup" element={<LoggedInRoute><SignupPage /></LoggedInRoute>} />
           <Route path="*" element={<NotFoundPage />} />
