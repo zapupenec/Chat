@@ -3,17 +3,17 @@ import {
   Button, Dropdown, ButtonGroup,
 } from 'react-bootstrap';
 
-import { selectors as channelsSelectors, actions as actionsSelectors } from '../slices/channelsSlice.js';
+import { channelsSelectors } from '../../store/slices';
 
 export const RemovableChannel = ({ channel, handleClickChannel }) => {
   const { id, name } = channel;
   const currentChannelId = useSelector(channelsSelectors.selectCurrentChannelId);
 
-  const handleRenameChannel = (id1) => () => {
+  const handleRenameChannel = () => () => {
 
   };
 
-  const handleDeleteChannel = (id2) => () => {
+  const handleDeleteChannel = () => () => {
 
   };
 

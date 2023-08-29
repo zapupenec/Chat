@@ -6,9 +6,13 @@ import {
   Navbar, Container,
 } from 'react-bootstrap';
 
+import { AuthButton } from './components';
+
 import {
-  AuthButton, ChatPage, LoggedInRoute, LoginPage, NotFoundPage, PrivateRoute, SignupPage,
-} from './components';
+  ChatPage, LoginPage, NotFoundPage, SignupPage,
+} from './pages';
+
+import { LoggedInRoute, PrivateRoute } from './routes';
 
 import { AuthProvider } from './providers';
 

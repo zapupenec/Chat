@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Nav } from 'react-bootstrap';
 
-import { selectors as channelsSelectors, actions as channelsActions } from '../slices/channelsSlice.js';
+import { channelsSelectors, channelsActions } from '../../store/slices';
 
-import { FixedChannel } from './FixedChannel.jsx';
-import { RemovableChannel } from './RemovableChannel.jsx';
+import { FixedChannel } from './FixedChannel';
+import { RemovableChannel } from './RemovableChannel';
 
 export const ChannelsBoxBody = () => {
   const channels = useSelector(channelsSelectors.selectAll);

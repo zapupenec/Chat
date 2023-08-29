@@ -1,10 +1,19 @@
 import { useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import {
   Form, InputGroup, Button,
 } from 'react-bootstrap';
 
 import { useFormik } from 'formik';
-import { Icon } from './Icon.jsx';
+import { Icon } from '../Icon';
+
+import { socket } from '../../api/socket';
+import { channelsSelectors } from '../../store/slices';
+
+const getUsername = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  return user.username;
+};
 
 export const MessagesBoxFooter = () => {
   const inputRef = useRef(null);
@@ -12,11 +21,19 @@ export const MessagesBoxFooter = () => {
     inputRef.current.focus();
   });
 
+  const currentChannelId = useSelector(channelsSelectors.selectCurrentChannelId);
+
   const formik = useFormik({
     initialValues: {
       body: '',
     },
-    onSubmit: async (values) => {
+    onSubmit: (values) => {
+      socket.emit('newMessage', {
+        text: values.body,
+        author: getUsername(),
+        channelId: currentChannelId,
+      });
+      formik.setSubmitting(false);
       // eslint-disable-next-line no-param-reassign
       values.body = '';
     },

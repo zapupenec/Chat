@@ -1,11 +1,11 @@
-import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Container, Row, Col, Card, Form, FloatingLabel, Button, Image,
 } from 'react-bootstrap';
-import { routes } from '../routes.js';
+
+import { api } from '../api';
 import { useAuth } from '../hooks';
 import loginImage from '../assets/login.jpg';
 
@@ -25,15 +25,14 @@ export const LoginPage = () => {
       username: '',
       password: '',
     },
-    onSubmit: async (values) => {
+    onSubmit: async ({ username, password }) => {
       setAuthFailed(false);
       try {
-        const { data } = await axios.post(routes.loginPath(), values);
+        const { data } = await api.login(username, password);
         auth.logIn();
         localStorage.setItem('user', JSON.stringify(data));
         navigate('/');
       } catch (error) {
-        // formik.setSubmitting(false);
         if (error.isAxiosError && error.response.status === 401) {
           setAuthFailed(true);
           inputRef.current.focus();
