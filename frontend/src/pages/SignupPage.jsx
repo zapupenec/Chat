@@ -7,7 +7,7 @@ import {
 import * as yup from 'yup';
 import signupImage from '../assets/signup.jpg';
 
-const signupSchema = yup.object().shape({
+const schema = yup.object().shape({
   username: yup.string()
     .min(3, 'От 3 до 20 символов')
     .max(20, 'От 3 до 20 символов')
@@ -16,7 +16,6 @@ const signupSchema = yup.object().shape({
     .min(6, 'Не менее 6 символов')
     .required('Обязательное поле'),
   confirmPassword: yup.string()
-    .required('Обязательное поле')
     .oneOf([yup.ref('password')], 'Пароли должны совпадать'),
 });
 
@@ -32,7 +31,7 @@ export const SignupPage = () => {
       password: '',
       confirmPassword: '',
     },
-    validationSchema: signupSchema,
+    validationSchema: schema,
     onSubmit: async () => {
 
     },
@@ -60,7 +59,6 @@ export const SignupPage = () => {
                     required
                     ref={inputRef}
                     disabled={formik.isSubmitting}
-                    isValid={formik.touched.username && !formik.errors.username}
                     isInvalid={formik.touched.username && formik.errors.username}
                   />
                   <Form.Control.Feedback type="invalid" tooltip>
@@ -77,7 +75,6 @@ export const SignupPage = () => {
                     onChange={formik.handleChange}
                     required
                     disabled={formik.isSubmitting}
-                    isValid={formik.touched.password && !formik.errors.password}
                     isInvalid={formik.touched.password && formik.errors.password}
                   />
                   <Form.Control.Feedback type="invalid" tooltip>
@@ -94,7 +91,6 @@ export const SignupPage = () => {
                     onChange={formik.handleChange}
                     required
                     disabled={formik.isSubmitting}
-                    isValid={formik.touched.confirmPassword && !formik.errors.confirmPassword}
                     isInvalid={formik.touched.confirmPassword && formik.errors.confirmPassword}
                   />
                   <Form.Control.Feedback type="invalid" tooltip>

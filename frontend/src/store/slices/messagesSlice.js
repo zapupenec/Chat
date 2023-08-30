@@ -29,7 +29,7 @@ const messagesSlice = createSlice({
 const selectorsAdapter = messagesAdapter.getSelectors((state) => state.messages);
 
 const selectMessagesByChannelId = (id) => createSelector(selectorsAdapter.selectAll, (state) => {
-  const selectedMessages = state.filter((e) => e.channelId === id);
+  const selectedMessages = state.filter((m) => m.channelId === id);
   return selectedMessages;
 });
 

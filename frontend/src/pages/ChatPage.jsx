@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Container, Row } from 'react-bootstrap';
 
 import { api, socket } from '../api';
 import { ChannelsBox, MessagesBox } from '../components';
-import { messagesActions } from '../store/slices';
+import { messagesActions, channelsActions } from '../store/slices';
 
 export const ChatPage = () => {
   useEffect(() => {
@@ -23,8 +23,16 @@ export const ChatPage = () => {
       dispatch(messagesActions.addMessage(message));
     });
 
-    socket.on('newMessage', (message) => {
-      dispatch(messagesActions.addMessage(message));
+    socket.on('newChannel', (channel) => {
+      dispatch(channelsActions.addChannel(channel));
+    });
+
+    socket.on('removeChannel', ({ id }) => {
+      dispatch(channelsActions.removeChannel(id));
+    });
+
+    socket.on('renameChannel', (channel) => {
+      dispatch(channelsActions.updateChannel({ id: channel.id, changes: channel }));
     });
   }, [dispatch]);
 

@@ -28,14 +28,19 @@ export const MessagesBoxFooter = () => {
       body: '',
     },
     onSubmit: (values) => {
-      socket.emit('newMessage', {
+      const message = {
         text: values.body,
         author: getUsername(),
         channelId: currentChannelId,
+      };
+
+      socket.emit('newMessage', message, ({ status }) => {
+        if (status === 'ok') {
+          formik.setSubmitting(false);
+          // eslint-disable-next-line no-param-reassign
+          values.body = '';
+        }
       });
-      formik.setSubmitting(false);
-      // eslint-disable-next-line no-param-reassign
-      values.body = '';
     },
   });
 
