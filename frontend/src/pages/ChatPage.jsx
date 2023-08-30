@@ -1,23 +1,24 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Container, Row } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 import { api, socket } from '../api';
 import { ChannelsBox, MessagesBox } from '../components';
 import { messagesActions, channelsActions } from '../store/slices';
 
 export const ChatPage = () => {
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+
   useEffect(() => {
     socket.connect();
 
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
-
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(api.fetchData());
+    socket.on('connect_error', (error) => {
+      toast.error(t('toasts.netWorkError'));
+      console.error(error);
+    });
 
     socket.on('newMessage', (message) => {
       dispatch(messagesActions.addMessage(message));
@@ -34,7 +35,19 @@ export const ChatPage = () => {
     socket.on('renameChannel', (channel) => {
       dispatch(channelsActions.updateChannel({ id: channel.id, changes: channel }));
     });
-  }, [dispatch]);
+
+    dispatch(api.fetchData());
+    // .unwrap()
+    // .catch((error) => {
+    //   toast.error(t('toasts.netWorkError'));
+    //   console.error(error);
+    // });
+
+    return () => {
+      socket.offAny();
+      socket.disconnect();
+    };
+  }, [dispatch, t]);
 
   return (
     <Container className="h-100 my-4 overflow-hidden rounded shadow">

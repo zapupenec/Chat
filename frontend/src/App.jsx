@@ -6,6 +6,7 @@ import {
   Navbar, Container,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { ToastContainer } from 'react-toastify';
 
 import { AuthButton } from './components';
 
@@ -38,6 +39,7 @@ export const App = () => {
           </Routes>
         </BrowserRouter>
       </div>
+      <ToastContainer pauseOnFocusLoss={false} />
     </AuthProvider>
   );
 };

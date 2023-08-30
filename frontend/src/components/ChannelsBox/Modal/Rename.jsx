@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 
@@ -33,9 +34,10 @@ export const Rename = ({ modalShown, hideModal, id }) => {
     validationSchema: getSchema(t, channelNames),
     onSubmit: (values) => {
       socket.emit('renameChannel', { name: values.name, id }, ({ status }) => {
+        formik.setSubmitting(false);
+        hideModal();
         if (status === 'ok') {
-          formik.setSubmitting(false);
-          hideModal();
+          toast.success(t('toasts.rename'));
         }
       });
     },

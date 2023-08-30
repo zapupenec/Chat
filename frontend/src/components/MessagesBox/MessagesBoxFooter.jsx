@@ -36,14 +36,10 @@ export const MessagesBoxFooter = () => {
         author: getUsername(),
         channelId: currentChannelId,
       };
-
-      socket.emit('newMessage', message, ({ status }) => {
-        if (status === 'ok') {
-          formik.setSubmitting(false);
-          // eslint-disable-next-line no-param-reassign
-          values.body = '';
-        }
-      });
+      socket.emit('newMessage', message);
+      formik.setSubmitting(false);
+      // eslint-disable-next-line no-param-reassign
+      values.body = '';
     },
   });
 

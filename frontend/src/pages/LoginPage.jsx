@@ -5,6 +5,7 @@ import {
   Container, Row, Col, Card, Form, FloatingLabel, Button, Image,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 import { api } from '../api';
 import { useAuth } from '../hooks';
@@ -35,12 +36,20 @@ export const LoginPage = () => {
         localStorage.setItem('user', JSON.stringify(data));
         navigate('/');
       } catch (error) {
-        if (error.isAxiosError && error.response.status === 401) {
-          setAuthFailed(true);
-          inputRef.current.focus();
-          inputRef.current.select();
+        inputRef.current.focus();
+        inputRef.current.select();
+
+        const { status } = error.response;
+
+        if (status >= 400) {
+          if (status === 401) {
+            setAuthFailed(true);
+            return;
+          }
+          toast.error(t('toasts.netWorkError'));
           return;
         }
+
         throw error;
       }
     },

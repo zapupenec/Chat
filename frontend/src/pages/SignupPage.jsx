@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import {
   Container, Row, Col, Card, Form, FloatingLabel, Button, Image,
 } from 'react-bootstrap';
@@ -54,13 +55,20 @@ export const SignupPage = () => {
         localStorage.setItem('user', JSON.stringify(data));
         navigate('/');
       } catch (error) {
-        if (error.isAxiosError && error.response.status === 409) {
-          setAuthFailed(true);
-          formik.errors.confirmPassword = t('errors.signup');
-          inputRef.current.focus();
-          inputRef.current.select();
+        inputRef.current.focus();
+        inputRef.current.select();
+        const { status } = error.response;
+
+        if (status >= 400) {
+          if (status === 409) {
+            setAuthFailed(true);
+            formik.errors.confirmPassword = t('errors.signup');
+            return;
+          }
+          toast.error(t('toasts.netWorkError'));
           return;
         }
+
         throw error;
       }
     },

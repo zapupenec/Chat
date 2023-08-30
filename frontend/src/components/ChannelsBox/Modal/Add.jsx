@@ -1,12 +1,13 @@
 import React, { useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 
 import { socket } from '../../../api';
-import { channelsSelectors } from '../../../store/slices';
+import { channelsActions, channelsSelectors } from '../../../store/slices';
 
 const getSchema = (t, channelNames) => {
   const schema = yup.object().shape({
@@ -21,6 +22,7 @@ const getSchema = (t, channelNames) => {
 };
 
 export const Add = ({ modalShown, hideModal }) => {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const channelNames = useSelector(channelsSelectors.selectChanelNames);
 
@@ -30,10 +32,12 @@ export const Add = ({ modalShown, hideModal }) => {
     },
     validationSchema: getSchema(t, channelNames),
     onSubmit: (values) => {
-      socket.emit('newChannel', { name: values.name }, ({ status }) => {
+      socket.emit('newChannel', { name: values.name }, ({ status, data: { id } }) => {
+        formik.setSubmitting(false);
+        hideModal();
         if (status === 'ok') {
-          formik.setSubmitting(false);
-          hideModal();
+          dispatch(channelsActions.setCurrentChannelId(id));
+          toast.success(t('toasts.add'));
         }
       });
     },

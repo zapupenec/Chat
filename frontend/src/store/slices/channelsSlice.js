@@ -12,10 +12,7 @@ const channelsSlice = createSlice({
   name: 'channels',
   initialState,
   reducers: {
-    addChannel: (state, { payload }) => {
-      state.currentChannelId = payload.id;
-      channelsAdapter.addOne(state, payload);
-    },
+    addChannel: channelsAdapter.addOne,
     updateChannel: channelsAdapter.updateOne,
     removeChannel: (state, { payload }) => {
       if (state.currentChannelId === payload) {
