@@ -1,11 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
-import { } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Container, Row, Col, Card, Form, FloatingLabel, Button, Image,
 } from 'react-bootstrap';
 import * as yup from 'yup';
+
+import { api } from '../api';
 import signupImage from '../assets/signup.jpg';
+import { useAuth } from '../hooks';
 
 const schema = yup.object().shape({
   username: yup.string()
@@ -20,6 +23,11 @@ const schema = yup.object().shape({
 });
 
 export const SignupPage = () => {
+  const navigate = useNavigate();
+
+  const auth = useAuth();
+  const [authFailed, setAuthFailed] = useState(false);
+
   const inputRef = useRef(null);
   useEffect(() => {
     inputRef.current.focus();
@@ -32,8 +40,23 @@ export const SignupPage = () => {
       confirmPassword: '',
     },
     validationSchema: schema,
-    onSubmit: async () => {
-
+    onSubmit: async ({ username, password }) => {
+      setAuthFailed(false);
+      try {
+        const { data } = await api.signup(username, password);
+        auth.logIn();
+        localStorage.setItem('user', JSON.stringify(data));
+        navigate('/');
+      } catch (error) {
+        if (error.isAxiosError && error.response.status === 409) {
+          setAuthFailed(true);
+          formik.errors.confirmPassword = 'Такой пользователь уже существует';
+          inputRef.current.focus();
+          inputRef.current.select();
+          return;
+        }
+        throw error;
+      }
     },
   });
 
@@ -58,8 +81,8 @@ export const SignupPage = () => {
                     onChange={formik.handleChange}
                     required
                     ref={inputRef}
-                    disabled={formik.isSubmitting}
-                    isInvalid={formik.touched.username && formik.errors.username}
+                    // disabled={formik.isSubmitting}
+                    isInvalid={(formik.touched.username && formik.errors.username) || authFailed}
                   />
                   <Form.Control.Feedback type="invalid" tooltip>
                     {formik.errors.username}
@@ -75,7 +98,7 @@ export const SignupPage = () => {
                     onChange={formik.handleChange}
                     required
                     disabled={formik.isSubmitting}
-                    isInvalid={formik.touched.password && formik.errors.password}
+                    isInvalid={(formik.touched.password && formik.errors.password) || authFailed}
                   />
                   <Form.Control.Feedback type="invalid" tooltip>
                     {formik.errors.password}
@@ -91,7 +114,10 @@ export const SignupPage = () => {
                     onChange={formik.handleChange}
                     required
                     disabled={formik.isSubmitting}
-                    isInvalid={formik.touched.confirmPassword && formik.errors.confirmPassword}
+                    isInvalid={
+                      (formik.touched.confirmPasswor && formik.errors.confirmPassword)
+                      || authFailed
+                    }
                   />
                   <Form.Control.Feedback type="invalid" tooltip>
                     {formik.errors.confirmPassword}

@@ -32,7 +32,7 @@ const channelsSlice = createSlice({
         state.currentChannelId = currentChannelId;
         state.defaultChannelId = currentChannelId;
         channelsAdapter.setAll(state, channels);
-      })
+      });
   },
 });
 

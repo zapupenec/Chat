@@ -22,7 +22,7 @@ export const App = () => (
       <BrowserRouter>
         <Navbar className="shadow-sm" bg="white">
           <Container>
-            <Navbar.Brand as={Link} to="/">My Chat</Navbar.Brand>
+            <Navbar.Brand as={Link} to="/">Hexlet Chat</Navbar.Brand>
             <AuthButton />
           </Container>
         </Navbar>
