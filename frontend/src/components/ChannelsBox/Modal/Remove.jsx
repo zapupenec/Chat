@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 import { socket } from '../../../api';
 
@@ -10,6 +11,8 @@ const handlePushEnter = (handler) => (e) => {
 };
 
 export const Remove = ({ modalShown, hideModal, id }) => {
+  const { t } = useTranslation();
+
   const handleRemove = () => {
     socket.emit('removeChannel', { id }, ({ status }) => {
       if (status === 'ok') {
@@ -32,14 +35,14 @@ export const Remove = ({ modalShown, hideModal, id }) => {
     >
       <Modal.Header closeButton>
         <Modal.Title>
-          Удалить канал
+          {t('channelsBox.removeTitle')}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p className="lead">Уверены?</p>
+        <p className="lead">{t('channelsBox.areYouSure')}</p>
         <div className="d-flex justify-content-end">
-          <Button className="me-2" variant="secondary" onClick={hideModal}>Отменить</Button>
-          <Button variant="danger" onClick={handleRemove} ref={btnRef}>Удалить</Button>
+          <Button className="me-2" variant="secondary" onClick={hideModal}>{t('buttons.cancel')}</Button>
+          <Button variant="danger" onClick={handleRemove} ref={btnRef}>{t('buttons.remove')}</Button>
         </div>
       </Modal.Body>
     </Modal>

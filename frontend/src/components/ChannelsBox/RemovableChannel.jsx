@@ -3,11 +3,14 @@ import { useSelector } from 'react-redux';
 import {
   Button, Dropdown, ButtonGroup,
 } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 import { Modal } from './Modal';
 import { channelsSelectors } from '../../store/slices';
 
 export const RemovableChannel = ({ channel, handleClickChannel }) => {
+  const { t } = useTranslation();
+
   const { id, name } = channel;
   const currentChannelId = useSelector(channelsSelectors.selectCurrentChannelId);
 
@@ -35,12 +38,12 @@ export const RemovableChannel = ({ channel, handleClickChannel }) => {
         variant={currentChannelId === id ? 'secondary' : ''}
         id={`dropdown-chanel-${name}`}
       >
-        <span className="visually-hidden">Управление каналом</span>
+        <span className="visually-hidden">{t('channelsBox.managementChannel')}</span>
       </Dropdown.Toggle>
       <Modal modalName={typeModal} modalShown={modalShown} hideModal={hideModal} id={id} />
       <Dropdown.Menu>
-        <Dropdown.Item as={Button} onClick={handleClickDropdownItem('Remove')}>Удалить</Dropdown.Item>
-        <Dropdown.Item as={Button} onClick={handleClickDropdownItem('Rename')}>Переименовать</Dropdown.Item>
+        <Dropdown.Item as={Button} onClick={handleClickDropdownItem('Remove')}>{t('buttons.remove')}</Dropdown.Item>
+        <Dropdown.Item as={Button} onClick={handleClickDropdownItem('Rename')}>{t('buttons.rename')}</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
   );

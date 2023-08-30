@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import {
   Form, InputGroup, Button,
 } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 import { useFormik } from 'formik';
 import { Icon } from '../Icon';
@@ -16,6 +17,8 @@ const getUsername = () => {
 };
 
 export const MessagesBoxFooter = () => {
+  const { t } = useTranslation();
+
   const inputRef = useRef(null);
   useEffect(() => {
     inputRef.current.focus();
@@ -53,8 +56,8 @@ export const MessagesBoxFooter = () => {
       >
         <InputGroup hasValidation>
           <Form.Control
-            placeholder="Введите сообщение..."
-            aria-label="Новое сообщение"
+            placeholder={t('messagesBox.placeholder')}
+            aria-label={t('messagesBox.nemMessage')}
             aria-describedby="send-new-message"
             className="border-0 p-0 ps-2"
             name="body"
@@ -71,7 +74,7 @@ export const MessagesBoxFooter = () => {
             disabled={formik.values.body === '' || formik.isSubmitting}
           >
             <Icon name="arrow-right-square" size={20} />
-            <span className="visually-hidden">Отправить</span>
+            <span className="visually-hidden">{t('buttons.send')}</span>
           </Button>
         </InputGroup>
       </Form>

@@ -1,8 +1,11 @@
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { channelsSelectors, messagesSelectors } from '../../store/slices';
 
 export const MessagesBoxHeader = () => {
+  const { t } = useTranslation();
+
   const channelId = useSelector(channelsSelectors.selectCurrentChannelId);
   const channel = useSelector(
     (state) => channelsSelectors.selectById(state, channelId),
@@ -18,7 +21,7 @@ export const MessagesBoxHeader = () => {
         </b>
       </p>
       <span className="text-muted">
-        {`${messages.length} сообщения`}
+        {t('messagesBox.messagesCount', { count: messages.length })}
       </span>
     </div>
   );

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Container, Row, Col, Card, Form, FloatingLabel, Button, Image,
 } from 'react-bootstrap';
@@ -10,19 +11,24 @@ import { api } from '../api';
 import signupImage from '../assets/signup.jpg';
 import { useAuth } from '../hooks';
 
-const schema = yup.object().shape({
-  username: yup.string()
-    .min(3, 'От 3 до 20 символов')
-    .max(20, 'От 3 до 20 символов')
-    .required('Обязательное поле'),
-  password: yup.string()
-    .min(6, 'Не менее 6 символов')
-    .required('Обязательное поле'),
-  confirmPassword: yup.string()
-    .oneOf([yup.ref('password')], 'Пароли должны совпадать'),
-});
+const getSchema = (t) => {
+  const schema = yup.object().shape({
+    username: yup.string()
+      .min(3, t('errors.min3max20'))
+      .max(20, t('errors.min3max20'))
+      .required(t('errors.required')),
+    password: yup.string()
+      .min(6, t('errors.min6'))
+      .required(t('errors.required')),
+    confirmPassword: yup.string()
+      .oneOf([yup.ref('password')], t('errors.passwordNotMatch')),
+  });
+
+  return schema;
+};
 
 export const SignupPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const auth = useAuth();
@@ -39,7 +45,7 @@ export const SignupPage = () => {
       password: '',
       confirmPassword: '',
     },
-    validationSchema: schema,
+    validationSchema: getSchema(t),
     onSubmit: async ({ username, password }) => {
       setAuthFailed(false);
       try {
@@ -50,7 +56,7 @@ export const SignupPage = () => {
       } catch (error) {
         if (error.isAxiosError && error.response.status === 409) {
           setAuthFailed(true);
-          formik.errors.confirmPassword = 'Такой пользователь уже существует';
+          formik.errors.confirmPassword = t('errors.signup');
           inputRef.current.focus();
           inputRef.current.select();
           return;
@@ -60,6 +66,10 @@ export const SignupPage = () => {
     },
   });
 
+  const isValid = (fieldName) => (
+    (formik.touched[fieldName] && formik.errors[fieldName]) || authFailed
+  );
+
   return (
     <Container fluid className="h-100">
       <Row className="justify-content-center align-content-center h-100">
@@ -67,14 +77,14 @@ export const SignupPage = () => {
           <Card className="shadow-sm">
             <Card.Body className="row p-5">
               <Col md="6" className="d-flex align-items-center justify-content-center">
-                <Image src={signupImage} roundedCircle alt="Регистрация" />
+                <Image src={signupImage} roundedCircle alt={t('signupPage.title')} />
               </Col>
               <Form className="col col-md-6" onSubmit={formik.handleSubmit} noValidate>
-                <h1 className="text-center mb-4">Регистрация</h1>
-                <FloatingLabel className="mb-3" controlId="username" label="Имя пользователя">
+                <h1 className="text-center mb-4">{t('signupPage.title')}</h1>
+                <FloatingLabel className="mb-3" controlId="username" label={t('signupPage.fields.username')}>
                   <Form.Control
                     type="username"
-                    placeholder="От 3 до 20 символов"
+                    placeholder={t('signupPage.fields.username')}
                     name="username"
                     autoComplete="username"
                     value={formik.values.username}
@@ -82,42 +92,39 @@ export const SignupPage = () => {
                     required
                     ref={inputRef}
                     // disabled={formik.isSubmitting}
-                    isInvalid={(formik.touched.username && formik.errors.username) || authFailed}
+                    isInvalid={isValid('username')}
                   />
                   <Form.Control.Feedback type="invalid" tooltip>
                     {formik.errors.username}
                   </Form.Control.Feedback>
                 </FloatingLabel>
-                <FloatingLabel className="mb-3" controlId="password" label="Пароль">
+                <FloatingLabel className="mb-3" controlId="password" label={t('signupPage.fields.password')}>
                   <Form.Control
                     type="password"
-                    placeholder="Пароль"
+                    placeholder={t('signupPage.fields.password')}
                     name="password"
                     autoComplete="new-password"
                     value={formik.values.password}
                     onChange={formik.handleChange}
                     required
                     disabled={formik.isSubmitting}
-                    isInvalid={(formik.touched.password && formik.errors.password) || authFailed}
+                    isInvalid={isValid('password')}
                   />
                   <Form.Control.Feedback type="invalid" tooltip>
                     {formik.errors.password}
                   </Form.Control.Feedback>
                 </FloatingLabel>
-                <FloatingLabel className="mb-4" controlId="confirmPassword" label="Подтвердите пароль">
+                <FloatingLabel className="mb-4" controlId="confirmPassword" label={t('signupPage.fields.confirmPassword')}>
                   <Form.Control
                     type="password"
-                    placeholder="Пароли должны совпадать"
+                    placeholder={t('signupPage.fields.confirmPassword')}
                     name="confirmPassword"
                     autoComplete="new-password"
                     value={formik.values.confirmPassword}
                     onChange={formik.handleChange}
                     required
                     disabled={formik.isSubmitting}
-                    isInvalid={
-                      (formik.touched.confirmPasswor && formik.errors.confirmPassword)
-                      || authFailed
-                    }
+                    isInvalid={isValid('confirmPassword')}
                   />
                   <Form.Control.Feedback type="invalid" tooltip>
                     {formik.errors.confirmPassword}
@@ -129,7 +136,7 @@ export const SignupPage = () => {
                   className="w-100"
                   disabled={formik.isSubmitting}
                 >
-                  Зарегистрироваться
+                  {t('buttons.signup')}
                 </Button>
               </Form>
             </Card.Body>

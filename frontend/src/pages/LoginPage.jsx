@@ -4,12 +4,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   Container, Row, Col, Card, Form, FloatingLabel, Button, Image,
 } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 import { api } from '../api';
 import { useAuth } from '../hooks';
 import loginImage from '../assets/login.jpg';
 
 export const LoginPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const auth = useAuth();
@@ -51,14 +53,14 @@ export const LoginPage = () => {
           <Card className="shadow-sm">
             <Card.Body className="row p-5">
               <Col md="6" className="d-flex align-items-center justify-content-center">
-                <Image src={loginImage} roundedCircle alt="Войти" />
+                <Image src={loginImage} roundedCircle alt={t('loginPage.title')} />
               </Col>
               <Form className="col col-md-6" onSubmit={formik.handleSubmit} noValidate>
-                <h1 className="text-center mb-4">Войти</h1>
-                <FloatingLabel className="mb-3" controlId="username" label="Ваш ник">
+                <h1 className="text-center mb-4">{t('loginPage.title')}</h1>
+                <FloatingLabel className="mb-3" controlId="username" label={t('loginPage.fields.username')}>
                   <Form.Control
                     type="username"
-                    placeholder="Ваш ник"
+                    placeholder={t('loginPage.fields.username')}
                     name="username"
                     autoComplete="username"
                     required
@@ -69,10 +71,10 @@ export const LoginPage = () => {
                     isInvalid={authFailed}
                   />
                 </FloatingLabel>
-                <FloatingLabel className="mb-4" controlId="password" label="Пароль">
+                <FloatingLabel className="mb-4" controlId="password" label={t('loginPage.fields.password')}>
                   <Form.Control
                     type="password"
-                    placeholder="Пароль"
+                    placeholder={t('loginPage.fields.password')}
                     name="password"
                     autoComplete="current-password"
                     required
@@ -82,7 +84,7 @@ export const LoginPage = () => {
                     isInvalid={authFailed}
                   />
                   <Form.Control.Feedback type="invalid" tooltip>
-                    Неверные имя пользователя или пароль
+                    {t('errors.login')}
                   </Form.Control.Feedback>
                 </FloatingLabel>
                 <Button
@@ -91,14 +93,14 @@ export const LoginPage = () => {
                   className="w-100"
                   disabled={formik.isSubmitting}
                 >
-                  Войти
+                  {t('buttons.login')}
                 </Button>
               </Form>
             </Card.Body>
             <Card.Footer className="p-4">
               <div className="text-center">
-                <span>Нет аккаунта? </span>
-                <Link to="/signup">Регистрация</Link>
+                <span>{t('loginPage.text')}</span>
+                <Link to="/signup">{t('loginPage.link')}</Link>
               </div>
             </Card.Footer>
           </Card>
