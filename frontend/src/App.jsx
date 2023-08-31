@@ -33,7 +33,7 @@ export const App = () => {
           </Routes>
         </BrowserRouter>
       </div>
-      <ToastContainer pauseOnFocusLoss={false} />
+      <ToastContainer pauseOnFocusLoss={false} pauseOnHover={false} />
     </AuthProvider>
   );
 };

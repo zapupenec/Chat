@@ -1,3 +1,3 @@
-import { filterProfanity } from './filterProfanity';
+import { filterProfanity } from './filterProfanity.mjs';
 
 export { filterProfanity };
