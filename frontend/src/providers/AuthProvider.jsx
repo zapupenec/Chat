@@ -1,6 +1,7 @@
 import {
   useCallback, useMemo, useState,
 } from 'react';
+
 import { AuthContext } from '../contexts';
 
 const hasToken = () => {

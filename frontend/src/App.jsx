@@ -1,21 +1,15 @@
 import {
   BrowserRouter, Routes, Route, Link,
 } from 'react-router-dom';
-
-import {
-  Navbar, Container,
-} from 'react-bootstrap';
+import { Navbar, Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { ToastContainer } from 'react-toastify';
 
 import { AuthButton } from './components';
-
 import {
   ChatPage, LoginPage, NotFoundPage, SignupPage,
 } from './pages';
-
 import { LoggedInRoute, PrivateRoute } from './routes';
-
 import { AuthProvider } from './providers';
 
 export const App = () => {

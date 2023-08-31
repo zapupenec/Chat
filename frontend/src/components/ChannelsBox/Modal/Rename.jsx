@@ -8,6 +8,7 @@ import { useFormik } from 'formik';
 
 import { socket } from '../../../api';
 import { channelsSelectors } from '../../../store/slices';
+import { filterProfanity } from '../../../lib';
 
 const getSchema = (t, channelNames) => {
   const schema = yup.object().shape({
@@ -33,11 +34,14 @@ export const Rename = ({ modalShown, hideModal, id }) => {
     },
     validationSchema: getSchema(t, channelNames),
     onSubmit: (values) => {
-      socket.emit('renameChannel', { name: values.name, id }, ({ status }) => {
+      const name = filterProfanity(values.name);
+      socket.emit('renameChannel', { name, id }, ({ status }) => {
         formik.setSubmitting(false);
-        hideModal();
         if (status === 'ok') {
+          hideModal();
           toast.success(t('toasts.rename'));
+        } else {
+          toast.error(t('toasts.netWorkError'));
         }
       });
     },

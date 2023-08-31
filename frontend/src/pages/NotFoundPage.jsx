@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Image } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+
 import notFoundImage from '../assets/notFound.svg';
 
 export const NotFoundPage = () => {

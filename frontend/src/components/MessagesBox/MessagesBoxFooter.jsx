@@ -4,12 +4,13 @@ import {
   Form, InputGroup, Button,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-
+import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
-import { Icon } from '../Icon';
 
+import { Icon } from '../Icon';
 import { socket } from '../../api/socket';
 import { channelsSelectors } from '../../store/slices';
+import { filterProfanity } from '../../lib';
 
 const getUsername = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -32,14 +33,19 @@ export const MessagesBoxFooter = () => {
     },
     onSubmit: (values) => {
       const message = {
-        text: values.body,
+        text: filterProfanity(values.body),
         author: getUsername(),
         channelId: currentChannelId,
       };
-      socket.emit('newMessage', message);
-      formik.setSubmitting(false);
-      // eslint-disable-next-line no-param-reassign
-      values.body = '';
+      socket.emit('newMessage', message, ({ status }) => {
+        formik.setSubmitting(false);
+        if (status === 'ok') {
+          // eslint-disable-next-line no-param-reassign
+          values.body = '';
+        } else {
+          toast.error(t('toasts.netWorkError'));
+        }
+      });
     },
   });
 

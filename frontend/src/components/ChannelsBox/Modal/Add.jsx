@@ -8,6 +8,7 @@ import { useFormik } from 'formik';
 
 import { socket } from '../../../api';
 import { channelsActions, channelsSelectors } from '../../../store/slices';
+import { filterProfanity } from '../../../lib';
 
 const getSchema = (t, channelNames) => {
   const schema = yup.object().shape({
@@ -32,12 +33,15 @@ export const Add = ({ modalShown, hideModal }) => {
     },
     validationSchema: getSchema(t, channelNames),
     onSubmit: (values) => {
-      socket.emit('newChannel', { name: values.name }, ({ status, data: { id } }) => {
+      const name = filterProfanity(values.name);
+      socket.emit('newChannel', { name }, ({ status, data: { id } }) => {
         formik.setSubmitting(false);
-        hideModal();
         if (status === 'ok') {
+          hideModal();
           dispatch(channelsActions.setCurrentChannelId(id));
           toast.success(t('toasts.add'));
+        } else {
+          toast.error(t('toasts.netWorkError'));
         }
       });
     },

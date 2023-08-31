@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+
 import { socket } from '../../../api';
 
 const handlePushEnter = (handler) => (e) => {
@@ -15,9 +16,11 @@ export const Remove = ({ modalShown, hideModal, id }) => {
 
   const handleRemove = () => {
     socket.emit('removeChannel', { id }, ({ status }) => {
-      hideModal();
       if (status === 'ok') {
+        hideModal();
         toast.success(t('toasts.remove'));
+      } else {
+        toast.error(t('toasts.netWorkError'));
       }
     });
   };

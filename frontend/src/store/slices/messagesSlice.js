@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createEntityAdapter, createSelector } from '@reduxjs/toolkit';
+
 import { actions as channelsActions } from './channelsSlice.js';
 import { api } from '../../api/index.js';
 

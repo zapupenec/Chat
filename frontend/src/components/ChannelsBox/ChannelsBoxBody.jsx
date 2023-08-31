@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Nav } from 'react-bootstrap';
 
 import { channelsSelectors, channelsActions } from '../../store/slices';
-
 import { FixedChannel } from './FixedChannel';
 import { RemovableChannel } from './RemovableChannel';
 
