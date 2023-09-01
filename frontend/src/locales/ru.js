@@ -3,6 +3,7 @@ export const ru = {
     languages: {
       ru: 'Русский',
     },
+    Loading: 'Загрузка',
     header: {
       logo: 'Hexlet Chat',
     },
@@ -22,6 +23,8 @@ export const ru = {
       messagesCount_many: '{{count}} сообщений',
       nemMessage: 'Новое сообщение',
       placeholder: 'Введите сообщение...',
+      history: 'История',
+      noLimit: 'б/о',
     },
     notFoundPage: {
       title: 'Страница не найдена',

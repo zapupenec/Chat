@@ -17,5 +17,11 @@ export const Modal = ({
   }
 
   const Component = getModal(modalName);
-  return <Component modalShown={modalShown} hideModal={hideModal} id={id} />;
+  return (
+    <Component
+      modalShown={modalShown}
+      hideModal={hideModal}
+      id={id}
+    />
+  );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { socket } from '../../../api';
 
 const handlePushEnter = (handler) => (e) => {
-  if (e.code === 'Enter') {
+  if (e.code === 'Enter' || e.code === 'NumpadEnter') {
     handler();
   }
 };
@@ -27,8 +27,11 @@ export const Remove = ({ modalShown, hideModal, id }) => {
 
   const btnRef = useRef(null);
   useEffect(() => {
-    btnRef.current.addEventListener('keyup', handlePushEnter);
-    return btnRef.current.removeEventListener('keyup', handlePushEnter);
+    const { current } = btnRef;
+    current.addEventListener('keydown', handlePushEnter);
+    return () => {
+      current.removeEventListener('keydown', handlePushEnter);
+    };
   }, []);
 
   return (

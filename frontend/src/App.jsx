@@ -10,13 +10,12 @@ import {
   ChatPage, LoginPage, NotFoundPage, SignupPage,
 } from './pages';
 import { LoggedInRoute, PrivateRoute } from './routes';
-import { AuthProvider } from './providers';
 
 export const App = () => {
   const { t } = useTranslation();
 
   return (
-    <AuthProvider>
+    <>
       <div className="d-flex flex-column h-100">
         <BrowserRouter>
           <Navbar className="shadow-sm" bg="white">
@@ -26,7 +25,10 @@ export const App = () => {
             </Container>
           </Navbar>
           <Routes>
-            <Route path="/" element={<PrivateRoute><ChatPage /></PrivateRoute>} />
+            <Route
+              path="/"
+              element={<PrivateRoute><ChatPage /></PrivateRoute>}
+            />
             <Route path="/login" element={<LoggedInRoute><LoginPage /></LoggedInRoute>} />
             <Route path="/signup" element={<LoggedInRoute><SignupPage /></LoggedInRoute>} />
             <Route path="*" element={<NotFoundPage />} />
@@ -34,6 +36,6 @@ export const App = () => {
         </BrowserRouter>
       </div>
       <ToastContainer pauseOnFocusLoss={false} pauseOnHover={false} />
-    </AuthProvider>
+    </>
   );
 };

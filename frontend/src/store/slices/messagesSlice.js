@@ -5,13 +5,16 @@ import { actions as channelsActions } from './channelsSlice.js';
 import { api } from '../../api/index.js';
 
 const messagesAdapter = createEntityAdapter();
-const initialState = messagesAdapter.getInitialState();
+const initialState = messagesAdapter.getInitialState({
+  hasAdd: false,
+});
 
 const messagesSlice = createSlice({
   name: 'messages',
   initialState,
   reducers: {
     addMessage: messagesAdapter.addOne,
+    setHasAdd: (state, { payload }) => { state.hasAdd = payload; },
   },
   extraReducers: (builder) => {
     builder
@@ -28,6 +31,7 @@ const messagesSlice = createSlice({
 });
 
 const selectorsAdapter = messagesAdapter.getSelectors((state) => state.messages);
+const selectHasAdd = (state) => state.messages.hasAdd;
 
 const selectMessagesByChannelId = (id) => createSelector(selectorsAdapter.selectAll, (state) => {
   const selectedMessages = state.filter((m) => m.channelId === id);
@@ -37,6 +41,7 @@ const selectMessagesByChannelId = (id) => createSelector(selectorsAdapter.select
 export const { actions } = messagesSlice;
 export const selectors = {
   ...selectorsAdapter,
+  selectHasAdd,
   selectMessagesByChannelId,
 };
 export default messagesSlice.reducer;

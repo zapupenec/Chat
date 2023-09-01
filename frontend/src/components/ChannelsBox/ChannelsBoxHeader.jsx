@@ -24,7 +24,11 @@ export const ChannelsBoxHeader = () => {
         <Icon name="plus-square" size={20} />
         <span className="visually-hidden">{t('buttons.add')}</span>
       </Button>
-      <Modal modalName="Add" modalShown={modalShown} hideModal={hideModal} />
+      <Modal
+        modalName="Add"
+        modalShown={modalShown}
+        hideModal={hideModal}
+      />
     </div>
   );
 };

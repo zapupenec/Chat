@@ -1,34 +1,44 @@
+import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Nav } from 'react-bootstrap';
+import { Scrollbars } from 'react-custom-scrollbars-2';
 
-import { channelsSelectors, channelsActions } from '../../store/slices';
-import { FixedChannel } from './FixedChannel';
-import { RemovableChannel } from './RemovableChannel';
+import { channelsActions, channelsSelectors } from '../../store/slices';
+import { Channel } from './Channel';
 
 export const ChannelsBoxBody = () => {
   const channels = useSelector(channelsSelectors.selectAll);
 
+  const hasAdd = useSelector(channelsSelectors.selectHasAdd);
+  const scrollbarsRef = useRef(null);
+
   const dispatch = useDispatch();
-  const handleClickChannel = (id) => () => {
-    dispatch(channelsActions.setCurrentChannelId(id));
-  };
+  useEffect(() => {
+    if (hasAdd) {
+      scrollbarsRef.current.view.scroll({
+        top: scrollbarsRef.current.getScrollHeight(),
+        behavior: 'smooth',
+      });
+      dispatch(channelsActions.setHasAdd(false));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [channels]);
 
   return (
-    <Nav
-      as="ul"
-      variant="pills"
-      id="channels-box"
-      className="flex-column px-2 mb-3 h-100 d-block overflow-y-auto overflow-x-hidden"
+    <Scrollbars
+      style={{ width: '100%', height: '100%' }}
+      ref={scrollbarsRef}
     >
-      {channels.map((channel) => (
-        <Nav.Item key={channel.id} as="li" className="w-100">
-          {
-            channel.removable
-              ? <RemovableChannel channel={channel} handleClickChannel={handleClickChannel} />
-              : <FixedChannel channel={channel} handleClickChannel={handleClickChannel} />
-          }
-        </Nav.Item>
-      ))}
-    </Nav>
+      <div>
+        <Nav
+          as="ul"
+          variant="pills"
+          id="channels-box"
+          className="flex-column px-2 h-100 d-block overflow-y-auto overflow-x-hidden"
+        >
+          {channels.map((channel) => <Channel key={channel.id} channel={channel} />)}
+        </Nav>
+      </div>
+    </Scrollbars>
   );
 };

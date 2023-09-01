@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -27,6 +27,11 @@ export const Add = ({ modalShown, hideModal }) => {
   const { t } = useTranslation();
   const channelNames = useSelector(channelsSelectors.selectChanelNames);
 
+  const inputRef = useRef();
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -34,11 +39,13 @@ export const Add = ({ modalShown, hideModal }) => {
     validationSchema: getSchema(t, channelNames),
     onSubmit: (values) => {
       const name = filterProfanity(values.name);
+
       socket.emit('newChannel', { name }, ({ status, data: { id } }) => {
         formik.setSubmitting(false);
         if (status === 'ok') {
           hideModal();
           dispatch(channelsActions.setCurrentChannelId(id));
+          dispatch(channelsActions.setHasAdd(true));
           toast.success(t('toasts.add'));
         } else {
           toast.error(t('toasts.netWorkError'));
@@ -46,11 +53,6 @@ export const Add = ({ modalShown, hideModal }) => {
       });
     },
   });
-
-  const inputRef = useRef();
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
 
   return (
     <Modal

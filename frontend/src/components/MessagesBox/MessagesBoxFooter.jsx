@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Form, InputGroup, Button,
 } from 'react-bootstrap';
@@ -9,7 +9,7 @@ import { useFormik } from 'formik';
 
 import { Icon } from '../Icon';
 import { socket } from '../../api/socket';
-import { channelsSelectors } from '../../store/slices';
+import { channelsSelectors, messagesActions } from '../../store/slices';
 import { filterProfanity } from '../../lib';
 
 const getUsername = () => {
@@ -19,6 +19,7 @@ const getUsername = () => {
 
 export const MessagesBoxFooter = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const inputRef = useRef(null);
   useEffect(() => {
@@ -40,6 +41,7 @@ export const MessagesBoxFooter = () => {
       socket.emit('newMessage', message, ({ status }) => {
         formik.setSubmitting(false);
         if (status === 'ok') {
+          dispatch(messagesActions.setHasAdd(true));
           // eslint-disable-next-line no-param-reassign
           values.body = '';
         } else {

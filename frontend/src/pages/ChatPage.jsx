@@ -1,23 +1,23 @@
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Container, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
 import { api, socket } from '../api';
-import { ChannelsBox, MessagesBox } from '../components';
-import { messagesActions, channelsActions } from '../store/slices';
+import { ChannelsBox, MessagesBox, Loading } from '../components';
+import { messagesActions, channelsActions, channelsSelectors } from '../store/slices';
 
 export const ChatPage = () => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
+  const isLoading = useSelector(channelsSelectors.selectIsLoading);
 
+  const dispatch = useDispatch();
   useEffect(() => {
     socket.connect();
 
-    socket.on('connect_error', (error) => {
+    socket.on('connect_error', () => {
       toast.error(t('toasts.netWorkError'));
-      console.error(error);
     });
 
     socket.on('newMessage', (message) => {
@@ -48,6 +48,10 @@ export const ChatPage = () => {
       socket.disconnect();
     };
   }, [dispatch, t]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <Container className="h-100 my-4 overflow-hidden rounded shadow">
