@@ -54,7 +54,7 @@ export const ru = {
       login: 'Войти',
       signup: 'Зарегистрироваться',
       logOut: 'Выйти',
-      add: 'Добавить',
+      add: '+',
       send: 'Отправить',
       cancel: 'Отменить',
       remove: 'Удалить',
