@@ -30,7 +30,7 @@ export const ChannelsBoxBody = () => {
       style={{ width: '100%', height: '100%' }}
       ref={scrollbarsRef}
     >
-      <div>
+      <div className="h-100">
         <Nav
           as="ul"
           variant="pills"
