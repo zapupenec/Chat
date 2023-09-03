@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';

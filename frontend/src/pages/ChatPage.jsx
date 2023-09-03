@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Row } from 'react-bootstrap';

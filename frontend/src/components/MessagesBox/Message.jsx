@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 /* eslint-disable react/display-name */
 import { memo } from 'react';
 

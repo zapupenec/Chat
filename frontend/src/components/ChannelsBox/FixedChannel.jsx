@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { useSelector } from 'react-redux';
 import { Button } from 'react-bootstrap';
 

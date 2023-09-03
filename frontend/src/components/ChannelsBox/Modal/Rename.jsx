@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { Modal, Form, Button } from 'react-bootstrap';

@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import {

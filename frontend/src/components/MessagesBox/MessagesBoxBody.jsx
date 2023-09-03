@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Scrollbars } from 'react-custom-scrollbars-2';

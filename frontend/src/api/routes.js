@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 const apiPath = '/api/v1';
 
 const routes = {

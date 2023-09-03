@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import profanityFilter from 'leo-profanity';
 
 profanityFilter.add(profanityFilter.getDictionary('fr'));

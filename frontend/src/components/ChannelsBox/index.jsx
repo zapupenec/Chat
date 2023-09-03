@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { Col } from 'react-bootstrap';
 
 import { ChannelsBoxHeader } from './ChannelsBoxHeader';

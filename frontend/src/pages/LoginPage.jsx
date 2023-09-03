@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';

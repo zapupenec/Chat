@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { Container, Row, Spinner } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 

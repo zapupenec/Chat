@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { ReactComponent as ArrowRightSquare } from '../assets/icons/arrow-right-square.svg';
 import { ReactComponent as PlusSquare } from '../assets/icons/plus-square.svg';
 

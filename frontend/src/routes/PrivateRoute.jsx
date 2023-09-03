@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { Navigate } from 'react-router-dom';
 
 import { useAuth } from '../hooks';
