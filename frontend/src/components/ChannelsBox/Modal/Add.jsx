@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 
-import { socket } from '../../../api';
+import { socketAPI } from '../../../api';
 import { channelsActions, channelsSelectors } from '../../../store/slices';
 import { filterProfanity } from '../../../lib';
 
@@ -39,9 +39,9 @@ export const Add = ({ modalShown, hideModal }) => {
     },
     validationSchema: getSchema(t, channelNames),
     onSubmit: (values) => {
-      const name = filterProfanity(values.name);
+      const name = filterProfanity.clean(values.name);
 
-      socket.emit('newChannel', { name }, ({ status, data: { id } }) => {
+      socketAPI.sendNewChannel({ name }, ({ status, data: { id } }) => {
         formik.setSubmitting(false);
         if (status === 'ok') {
           hideModal();

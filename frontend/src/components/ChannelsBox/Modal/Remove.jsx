@@ -4,7 +4,7 @@ import { Modal, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
-import { socket } from '../../../api';
+import { socketAPI } from '../../../api';
 
 const handlePushEnter = (handler) => (e) => {
   if (e.code === 'Enter' || e.code === 'NumpadEnter') {
@@ -16,7 +16,7 @@ export const Remove = ({ modalShown, hideModal, id }) => {
   const { t } = useTranslation();
 
   const handleRemove = () => {
-    socket.emit('removeChannel', { id }, ({ status }) => {
+    socketAPI.sendRemoveChannel({ id }, ({ status }) => {
       if (status === 'ok') {
         hideModal();
         toast.success(t('toasts.remove'));

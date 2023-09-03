@@ -5,7 +5,7 @@ import { Container, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
-import { api, socket } from '../api';
+import { api, socketAPI } from '../api';
 import { ChannelsBox, MessagesBox, Loading } from '../components';
 import { messagesActions, channelsActions, channelsSelectors } from '../store/slices';
 
@@ -15,38 +15,33 @@ export const ChatPage = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    socket.connect();
+    socketAPI.connect();
 
-    socket.on('connect_error', () => {
+    socketAPI.connectError(() => {
       toast.error(t('toasts.netWorkError'));
     });
 
-    socket.on('newMessage', (message) => {
+    socketAPI.recieveMessage((message) => {
       dispatch(messagesActions.addMessage(message));
     });
 
-    socket.on('newChannel', (channel) => {
+    socketAPI.recieveChannel((channel) => {
       dispatch(channelsActions.addChannel(channel));
     });
 
-    socket.on('removeChannel', ({ id }) => {
-      dispatch(channelsActions.removeChannel(id));
+    socketAPI.recieveRemoveChannel((channel) => {
+      dispatch(channelsActions.removeChannel(channel.id));
     });
 
-    socket.on('renameChannel', (channel) => {
+    socketAPI.recieveRenameChannel((channel) => {
       dispatch(channelsActions.updateChannel({ id: channel.id, changes: channel }));
     });
 
     dispatch(api.fetchData());
-    // .unwrap()
-    // .catch((error) => {
-    //   toast.error(t('toasts.netWorkError'));
-    //   console.error(error);
-    // });
 
     return () => {
-      socket.offAny();
-      socket.disconnect();
+      socketAPI.unsubscribeAll();
+      socketAPI.disconnect();
     };
   }, [dispatch, t]);
 

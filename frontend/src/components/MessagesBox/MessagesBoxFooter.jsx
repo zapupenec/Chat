@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 
 import { Icon } from '../Icon';
-import { socket } from '../../api/socket';
+import { socketAPI } from '../../api';
 import { channelsSelectors, messagesActions } from '../../store/slices';
 import { filterProfanity } from '../../lib';
 
@@ -35,11 +35,11 @@ export const MessagesBoxFooter = () => {
     },
     onSubmit: (values) => {
       const message = {
-        text: filterProfanity(values.body),
+        text: filterProfanity.clean(values.body),
         author: getUsername(),
         channelId: currentChannelId,
       };
-      socket.emit('newMessage', message, ({ status }) => {
+      socketAPI.sendNewMessage(message, ({ status }) => {
         formik.setSubmitting(false);
         if (status === 'ok') {
           dispatch(messagesActions.setHasAdd(true));

@@ -1,7 +1,7 @@
 import { api } from './api';
-import { socket } from './socket';
+import { socketAPI } from './socketAPI';
 
 export {
   api,
-  socket,
+  socketAPI,
 };

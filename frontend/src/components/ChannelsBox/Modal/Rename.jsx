@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 
-import { socket } from '../../../api';
+import { socketAPI } from '../../../api';
 import { channelsSelectors } from '../../../store/slices';
 import { filterProfanity } from '../../../lib';
 
@@ -35,8 +35,9 @@ export const Rename = ({ modalShown, hideModal, id }) => {
     },
     validationSchema: getSchema(t, channelNames),
     onSubmit: (values) => {
-      const name = filterProfanity(values.name);
-      socket.emit('renameChannel', { name, id }, ({ status }) => {
+      const name = filterProfanity.clean(values.name);
+
+      socketAPI.sendRenameChannel({ name, id }, ({ status }) => {
         formik.setSubmitting(false);
         if (status === 'ok') {
           hideModal();
