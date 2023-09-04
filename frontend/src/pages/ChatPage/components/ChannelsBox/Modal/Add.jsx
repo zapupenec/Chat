@@ -1,15 +1,15 @@
 /* eslint-disable import/prefer-default-export */
 import { useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 
-import { socketAPI } from '../../../api';
-import { channelsSelectors } from '../../../store/slices';
-import { filterProfanity } from '../../../lib';
+import { socketAPI } from '../../../../../api';
+import { channelsActions, channelsSelectors } from '../../../../../store/slices';
+import { filterProfanity } from '../../../../../lib';
 
 const getSchema = (t, channelNames) => {
   const schema = yup.object().shape({
@@ -23,36 +23,37 @@ const getSchema = (t, channelNames) => {
   return schema;
 };
 
-export const Rename = ({ modalShown, hideModal, id }) => {
+export const Add = ({ modalShown, hideModal }) => {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
-
   const channelNames = useSelector(channelsSelectors.selectChanelNames);
-  const channel = useSelector((state) => channelsSelectors.selectById(state, id));
+
+  const inputRef = useRef();
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   const formik = useFormik({
     initialValues: {
-      name: channel.name,
+      name: '',
     },
     validationSchema: getSchema(t, channelNames),
     onSubmit: (values) => {
       const name = filterProfanity.clean(values.name);
 
-      socketAPI.sendRenameChannel({ name, id }, ({ status }) => {
+      socketAPI.sendNewChannel({ name }, ({ status, data: { id } }) => {
         formik.setSubmitting(false);
         if (status === 'ok') {
           hideModal();
-          toast.success(t('toasts.rename'));
+          dispatch(channelsActions.setCurrentChannelId(id));
+          dispatch(channelsActions.setHasAdd(true));
+          toast.success(t('toasts.add'));
         } else {
           toast.error(t('toasts.netWorkError'));
         }
       });
     },
   });
-
-  const inputRef = useRef(null);
-  useEffect(() => {
-    inputRef.current.select();
-  }, []);
 
   return (
     <Modal
@@ -62,7 +63,7 @@ export const Rename = ({ modalShown, hideModal, id }) => {
     >
       <Modal.Header closeButton>
         <Modal.Title>
-          {t('channelsBox.renameTitle')}
+          {t('channelsBox.addTitle')}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Nav } from 'react-bootstrap';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 
-import { channelsActions, channelsSelectors } from '../../store/slices';
+import { channelsActions, channelsSelectors } from '../../../../store/slices';
 import { Channel } from './Channel';
 
 export const ChannelsBoxBody = () => {

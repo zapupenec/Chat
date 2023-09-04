@@ -1,17 +1,28 @@
 /* eslint-disable import/prefer-default-export */
 import {
-  useCallback, useMemo, useState,
+  createContext, useCallback, useContext, useMemo, useState,
 } from 'react';
 
-import { AuthContext } from '../contexts';
+const AuthContext = createContext({});
 
-const hasToken = () => {
+const getAuthHeader = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  if (user && user.token) {
+    return { Authorization: `Bearer ${user.token}` };
+  }
+
+  return {};
+};
+
+const getToken = () => {
   const userId = JSON.parse(localStorage.getItem('user'));
   return userId && userId.token;
 };
 
 export const AuthProvider = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState(hasToken());
+  const [loggedIn, setLoggedIn] = useState(getToken());
+  const [user, setUser] = useState({});
   const logIn = useCallback(() => setLoggedIn(true), []);
   const logOut = useCallback(() => {
     localStorage.removeItem('user');
@@ -34,3 +45,5 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+export const useAuth = () => useContext(AuthContext);

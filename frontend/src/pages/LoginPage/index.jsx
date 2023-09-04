@@ -8,9 +8,10 @@ import {
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
-import { api } from '../api';
-import { useAuth } from '../hooks';
-import loginImage from '../assets/login.jpg';
+import { api } from '../../api';
+import { useAuth } from '../../contexts/AuthContext';
+import loginImage from '../../assets/login.jpg';
+import { routes } from '../../routes';
 
 export const LoginPage = () => {
   const { t } = useTranslation();
@@ -110,7 +111,7 @@ export const LoginPage = () => {
             <Card.Footer className="p-4">
               <div className="text-center">
                 <span>{t('loginPage.text')}</span>
-                <Link to="/signup">{t('loginPage.link')}</Link>
+                <Link to={routes.signup}>{t('loginPage.link')}</Link>
               </div>
             </Card.Footer>
           </Card>

@@ -5,9 +5,9 @@ import { Container, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
-import { api, socketAPI } from '../api';
-import { ChannelsBox, MessagesBox, Loading } from '../components';
-import { messagesActions, channelsActions, channelsSelectors } from '../store/slices';
+import { api, socketAPI } from '../../api';
+import { ChannelsBox, MessagesBox, Loading } from './components';
+import { messagesActions, channelsActions, channelsSelectors } from '../../store/slices';
 
 export const ChatPage = () => {
   const { t } = useTranslation();

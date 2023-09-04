@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { InputGroup, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { channelsActions } from '../../store/slices';
+import { channelsActions } from '../../../../store/slices';
 
 export const MessagesBoxHeader = ({ count, name }) => {
   const { t } = useTranslation();

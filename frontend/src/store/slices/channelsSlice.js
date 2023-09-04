@@ -48,6 +48,8 @@ const selectIsLoading = (state) => state.channels.isLoading;
 
 const selectCurrentChannelId = (state) => state.channels.currentChannelId;
 const selectDefaultChannelId = (state) => state.channels.defaultChannelId;
+// const channel = useSelector((state) => channelsSelectors.selectById(state, id));
+const selectChannelById = (id) => (state) => selectorsAdapter.selectById(state, id);
 const selectHistoryLength = (state) => state.channels.historyLength;
 const selectHasAdd = (state) => state.channels.hasAdd;
 
@@ -62,6 +64,7 @@ export const selectors = {
   selectIsLoading,
   selectCurrentChannelId,
   selectDefaultChannelId,
+  selectChannelById,
   selectHistoryLength,
   selectHasAdd,
   selectChanelNames,

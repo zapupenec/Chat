@@ -7,7 +7,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { Modal } from './Modal';
-import { channelsSelectors } from '../../store/slices';
+import { channelsSelectors } from '../../../../store/slices';
 
 export const RemovableChannel = ({ channel, handleClickChannel }) => {
   const { t } = useTranslation();

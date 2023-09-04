@@ -2,7 +2,7 @@
 import { useSelector } from 'react-redux';
 import { Button } from 'react-bootstrap';
 
-import { channelsSelectors } from '../../store/slices';
+import { channelsSelectors } from '../../../../store/slices';
 
 export const FixedChannel = ({ channel, handleClickChannel }) => {
   const { id, name } = channel;

@@ -8,7 +8,7 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 
 import { store } from './store';
-import { AuthProvider } from './providers';
+import { AuthProvider } from './contexts/AuthContext';
 import { App } from './App';
 import { i18next } from './i18next';
 

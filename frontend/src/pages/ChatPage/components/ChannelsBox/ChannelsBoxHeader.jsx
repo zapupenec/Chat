@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { Icon } from '../Icon';
+import { Icon } from '../../../../common-components';
 import { Modal } from './Modal';
 
 export const ChannelsBoxHeader = () => {

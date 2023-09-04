@@ -6,11 +6,11 @@ import { Navbar, Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { ToastContainer } from 'react-toastify';
 
-import { AuthButton } from './components';
+import { AuthButton } from './common-components';
 import {
   ChatPage, LoginPage, NotFoundPage, SignupPage,
 } from './pages';
-import { LoggedInRoute, PrivateRoute } from './routes';
+import { LoggedInRoute, PrivateRoute, routes } from './routes';
 
 export const App = () => {
   const { t } = useTranslation();
@@ -21,18 +21,18 @@ export const App = () => {
         <BrowserRouter>
           <Navbar className="shadow-sm" bg="white">
             <Container>
-              <Navbar.Brand as={Link} to="/">{t('header.logo')}</Navbar.Brand>
+              <Navbar.Brand as={Link} to={routes.main}>{t('header.logo')}</Navbar.Brand>
               <AuthButton />
             </Container>
           </Navbar>
           <Routes>
             <Route
-              path="/"
+              path={routes.main}
               element={<PrivateRoute><ChatPage /></PrivateRoute>}
             />
-            <Route path="/login" element={<LoggedInRoute><LoginPage /></LoggedInRoute>} />
-            <Route path="/signup" element={<LoggedInRoute><SignupPage /></LoggedInRoute>} />
-            <Route path="*" element={<NotFoundPage />} />
+            <Route path={routes.login} element={<LoggedInRoute><LoginPage /></LoggedInRoute>} />
+            <Route path={routes.signup} element={<LoggedInRoute><SignupPage /></LoggedInRoute>} />
+            <Route path={routes.notFound} element={<NotFoundPage />} />
           </Routes>
         </BrowserRouter>
       </div>

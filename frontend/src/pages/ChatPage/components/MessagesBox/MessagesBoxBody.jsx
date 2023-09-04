@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 
 import { Message } from './Message';
-import { messagesActions, messagesSelectors } from '../../store/slices';
+import { messagesActions, messagesSelectors } from '../../../../store/slices';
 
 export const MessagesBoxBody = ({ messages }) => {
   const [isAutoScroll, setIsAutoScroll] = useState(true);

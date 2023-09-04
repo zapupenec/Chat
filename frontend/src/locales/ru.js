@@ -48,8 +48,8 @@ export const ru = {
         password: 'Пароль',
         confirmPassword: 'Подтвердите пароль',
       },
-      text: 'Нет аккаунта? ',
-      link: 'Регистрация',
+      text: 'Уже есть аккаунт? ',
+      link: 'Войти',
     },
     buttons: {
       login: 'Войти',

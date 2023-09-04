@@ -8,10 +8,10 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 
-import { Icon } from '../Icon';
-import { socketAPI } from '../../api';
-import { channelsSelectors, messagesActions } from '../../store/slices';
-import { filterProfanity } from '../../lib';
+import { Icon } from '../../../../common-components';
+import { socketAPI } from '../../../../api';
+import { channelsSelectors, messagesActions } from '../../../../store/slices';
+import { filterProfanity } from '../../../../lib';
 
 const getUsername = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -35,7 +35,7 @@ export const MessagesBoxFooter = () => {
     },
     onSubmit: (values) => {
       const message = {
-        text: filterProfanity.clean(values.body),
+        text: filterProfanity.clean(values.body.trim()),
         author: getUsername(),
         channelId: currentChannelId,
       };
@@ -76,7 +76,7 @@ export const MessagesBoxFooter = () => {
             type="submit"
             id="send-new-message"
             className="btn-group-vertical"
-            disabled={formik.values.body === '' || formik.isSubmitting}
+            disabled={formik.values.body.trim() === '' || formik.isSubmitting}
           >
             <Icon name="arrow-right-square" size={20} />
             <span className="visually-hidden">{t('buttons.send')}</span>

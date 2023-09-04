@@ -4,7 +4,7 @@ import { Modal, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
-import { socketAPI } from '../../../api';
+import { socketAPI } from '../../../../../api';
 
 const handlePushEnter = (handler) => (e) => {
   if (e.code === 'Enter' || e.code === 'NumpadEnter') {

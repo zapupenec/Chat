@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { Image } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import notFoundImage from '../assets/notFound.svg';
+import notFoundImage from '../../assets/notFound.svg';
+import { routes } from '../../routes';
 
 export const NotFoundPage = () => {
   const { t } = useTranslation();
@@ -14,7 +15,7 @@ export const NotFoundPage = () => {
       <h1 className="h4 text-muted">{t('notFoundPage.title')}</h1>
       <p className="text-muted">
         <span>{t('notFoundPage.text')}</span>
-        <Link to="/">{t('notFoundPage.link')}</Link>
+        <Link to={routes.main}>{t('notFoundPage.link')}</Link>
       </p>
     </div>
   );

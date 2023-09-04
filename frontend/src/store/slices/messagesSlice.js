@@ -1,7 +1,8 @@
 /* eslint-disable no-param-reassign */
+import { useSelector } from 'react-redux';
 import { createSlice, createEntityAdapter, createSelector } from '@reduxjs/toolkit';
 
-import { actions as channelsActions } from './channelsSlice.js';
+import { actions as channelsActions, selectors as channelsSelectors } from './channelsSlice.js';
 import { api } from '../../api/index.js';
 
 const messagesAdapter = createEntityAdapter();
@@ -34,7 +35,9 @@ const selectorsAdapter = messagesAdapter.getSelectors((state) => state.messages)
 const selectHasAdd = (state) => state.messages.hasAdd;
 
 const selectMessagesByChannelId = (id) => createSelector(selectorsAdapter.selectAll, (state) => {
-  const selectedMessages = state.filter((m) => m.channelId === id);
+  const historyLength = useSelector(channelsSelectors.selectHistoryLength);
+  const selectedMessages = state.filter((m) => m.channelId === id)
+    .slice(-historyLength);
   return selectedMessages;
 });
 

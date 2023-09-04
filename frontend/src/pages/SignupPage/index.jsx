@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import {
@@ -9,9 +9,10 @@ import {
 } from 'react-bootstrap';
 import * as yup from 'yup';
 
-import { api } from '../api';
-import signupImage from '../assets/signup.jpg';
-import { useAuth } from '../hooks';
+import { api } from '../../api';
+import signupImage from '../../assets/signup.jpg';
+import { useAuth } from '../../contexts/AuthContext';
+import { routes } from '../../routes';
 
 const getSchema = (t) => {
   const schema = yup.object().shape({
@@ -149,6 +150,12 @@ export const SignupPage = () => {
                 </Button>
               </Form>
             </Card.Body>
+            <Card.Footer className="p-4">
+              <div className="text-center">
+                <span>{t('signupPage.text')}</span>
+                <Link to={routes.login}>{t('signupPage.link')}</Link>
+              </div>
+            </Card.Footer>
           </Card>
         </Col>
       </Row>
