@@ -5,14 +5,17 @@ import {
 import { Navbar, Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { ToastContainer } from 'react-toastify';
+import { setLocale } from 'yup';
 
 import { AuthButton } from './common-components';
 import {
   ChatPage, LoginPage, NotFoundPage, SignupPage,
 } from './pages';
 import { LoggedInRoute, PrivateRoute, routes } from './routes';
+import { locale } from './locales';
 
 export const App = () => {
+  setLocale(locale);
   const { t } = useTranslation();
 
   return (

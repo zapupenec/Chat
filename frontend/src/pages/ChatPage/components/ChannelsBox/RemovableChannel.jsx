@@ -1,27 +1,21 @@
 /* eslint-disable import/prefer-default-export */
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Button, Dropdown, ButtonGroup,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { Modal } from './Modal';
-import { channelsSelectors } from '../../../../store/slices';
+import { channelsSelectors, modalsActions } from '../../../../store/slices';
 
 export const RemovableChannel = ({ channel, handleClickChannel }) => {
   const { t } = useTranslation();
-
   const { id, name } = channel;
   const currentChannelId = useSelector(channelsSelectors.selectCurrentChannelId);
 
-  const [modalShown, setModalShown] = useState(false);
-  const [typeModal, setTypeModal] = useState(null);
-
-  const hideModal = () => setModalShown(false);
-  const handleClickDropdownItem = (modalName) => () => {
-    setModalShown(true);
-    setTypeModal(modalName);
+  const dispatch = useDispatch();
+  const showModal = (type) => () => {
+    dispatch(modalsActions.setTypeModal(type));
+    dispatch(modalsActions.setChannelId(id));
   };
 
   return (
@@ -41,10 +35,9 @@ export const RemovableChannel = ({ channel, handleClickChannel }) => {
       >
         <span className="visually-hidden">{t('channelsBox.managementChannel')}</span>
       </Dropdown.Toggle>
-      <Modal modalName={typeModal} modalShown={modalShown} hideModal={hideModal} id={id} />
       <Dropdown.Menu>
-        <Dropdown.Item as={Button} onClick={handleClickDropdownItem('Remove')}>{t('buttons.remove')}</Dropdown.Item>
-        <Dropdown.Item as={Button} onClick={handleClickDropdownItem('Rename')}>{t('buttons.rename')}</Dropdown.Item>
+        <Dropdown.Item as={Button} onClick={showModal('remove')}>{t('buttons.remove')}</Dropdown.Item>
+        <Dropdown.Item as={Button} onClick={showModal('rename')}>{t('buttons.rename')}</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
   );

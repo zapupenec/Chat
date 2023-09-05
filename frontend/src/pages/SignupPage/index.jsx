@@ -7,24 +7,24 @@ import { toast } from 'react-toastify';
 import {
   Container, Row, Col, Card, Form, FloatingLabel, Button, Image,
 } from 'react-bootstrap';
-import * as yup from 'yup';
+import { object, ref, string } from 'yup';
 
 import { api } from '../../api';
 import signupImage from '../../assets/signup.jpg';
 import { useAuth } from '../../contexts/AuthContext';
 import { routes } from '../../routes';
 
-const getSchema = (t) => {
-  const schema = yup.object().shape({
-    username: yup.string()
-      .min(3, t('errors.min3max20'))
-      .max(20, t('errors.min3max20'))
-      .required(t('errors.required')),
-    password: yup.string()
-      .min(6, t('errors.min6'))
-      .required(t('errors.required')),
-    confirmPassword: yup.string()
-      .oneOf([yup.ref('password')], t('errors.passwordNotMatch')),
+const getSchema = () => {
+  const schema = object().shape({
+    username: string()
+      .min(3)
+      .max(20)
+      .required(),
+    password: string()
+      .min(6)
+      .required(),
+    confirmPassword: string()
+      .oneOf([ref('password')]),
   });
 
   return schema;
@@ -48,7 +48,7 @@ export const SignupPage = () => {
       password: '',
       confirmPassword: '',
     },
-    validationSchema: getSchema(t),
+    validationSchema: getSchema(),
     onSubmit: async ({ username, password }) => {
       setAuthFailed(false);
       try {
@@ -105,7 +105,7 @@ export const SignupPage = () => {
                     isInvalid={isValid('username')}
                   />
                   <Form.Control.Feedback type="invalid" tooltip>
-                    {formik.errors.username}
+                    {t(formik.errors.username)}
                   </Form.Control.Feedback>
                 </FloatingLabel>
                 <FloatingLabel className="mb-3" controlId="password" label={t('signupPage.fields.password')}>
@@ -121,7 +121,7 @@ export const SignupPage = () => {
                     isInvalid={isValid('password')}
                   />
                   <Form.Control.Feedback type="invalid" tooltip>
-                    {formik.errors.password}
+                    {t(formik.errors.password)}
                   </Form.Control.Feedback>
                 </FloatingLabel>
                 <FloatingLabel className="mb-4" controlId="confirmPassword" label={t('signupPage.fields.confirmPassword')}>
@@ -137,7 +137,7 @@ export const SignupPage = () => {
                     isInvalid={isValid('confirmPassword')}
                   />
                   <Form.Control.Feedback type="invalid" tooltip>
-                    {formik.errors.confirmPassword}
+                    {t(formik.errors.confirmPassword)}
                   </Form.Control.Feedback>
                 </FloatingLabel>
                 <Button

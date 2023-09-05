@@ -10,13 +10,14 @@ export const ru = {
     },
     channelsBox: {
       title: 'Каналы',
-      addTitle: 'Добавить канал',
-      renameTitle: 'Переименовать канал',
-      removeTitle: 'Удалить канал',
-
-      areYouSure: 'Уверены?',
-      channelName: 'Имя канала',
       managementChannel: 'Управление каналом',
+    },
+    modals: {
+      channelName: 'Имя канала',
+      areYouSure: 'Уверены?',
+      add: 'Добавить канал',
+      rename: 'Переименовать канал',
+      remove: 'Удалить канал',
     },
     messagesBox: {
       messagesCount_one: '{{count}} сообщение',
