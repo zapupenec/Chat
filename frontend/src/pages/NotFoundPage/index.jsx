@@ -15,7 +15,7 @@ export const NotFoundPage = () => {
       <h1 className="h4 text-muted">{t('notFoundPage.title')}</h1>
       <p className="text-muted">
         <span>{t('notFoundPage.text')}</span>
-        <Link to={routes.main}>{t('notFoundPage.link')}</Link>
+        <Link to={routes.pages.main}>{t('notFoundPage.link')}</Link>
       </p>
     </div>
   );

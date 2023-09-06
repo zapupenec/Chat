@@ -8,9 +8,10 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 
 import { store } from './store';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider } from './contexts';
 import { App } from './App';
 import { i18next } from './i18next';
+import { httpClient } from './api';
 
 const rollbarConfig = {
   accessToken: process.env.REACT_APP_POST_CLIENT_ITEM_ACCESS_TOKEN,
@@ -23,7 +24,7 @@ root.render(
     <ErrorBoundary>
       <I18nextProvider i18n={i18next}>
         <ReduxProvider store={store}>
-          <AuthProvider>
+          <AuthProvider httpClient={httpClient}>
             <App />
           </AuthProvider>
         </ReduxProvider>

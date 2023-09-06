@@ -13,9 +13,9 @@ const modals = {
   remove: Remove,
   rename: Rename,
 };
-const getBody = (typeModal) => {
+const getBody = (typeModal, hideModal) => {
   const Component = modals[typeModal];
-  return <Component />;
+  return <Component hideModal={hideModal} />;
 };
 
 export const CustomModal = () => {
@@ -43,7 +43,7 @@ export const CustomModal = () => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {getBody(typeModal)}
+        {getBody(typeModal, hideModal)}
       </Modal.Body>
     </Modal>
   );

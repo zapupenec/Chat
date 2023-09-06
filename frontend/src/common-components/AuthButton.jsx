@@ -2,13 +2,13 @@
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts';
 
 export const AuthButton = () => {
-  const auth = useAuth();
+  const { logOut, user } = useAuth();
   const { t } = useTranslation();
 
   return (
-    auth.loggedIn && <Button onClick={auth.logOut}>{t('buttons.logOut')}</Button>
+    user && <Button onClick={logOut}>{t('buttons.logOut')}</Button>
   );
 };

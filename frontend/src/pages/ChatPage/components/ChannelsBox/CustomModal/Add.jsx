@@ -1,15 +1,14 @@
 /* eslint-disable import/prefer-default-export */
 import { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { object, string } from 'yup';
 import { useFormik } from 'formik';
 
-import { socketAPI } from '../../../../../api';
-import { channelsActions, channelsSelectors, modalsActions } from '../../../../../store/slices';
+import { channelsSelectors } from '../../../../../store/slices';
 import { filterProfanity } from '../../../../../lib';
+import { useAPI } from '../../../../../contexts';
 
 const getSchema = (channelNames) => {
   const schema = object().shape({
@@ -23,15 +22,11 @@ const getSchema = (channelNames) => {
   return schema;
 };
 
-export const Add = () => {
-  const dispatch = useDispatch();
+export const Add = ({ hideModal }) => {
   const { t } = useTranslation();
+  const { addChannel } = useAPI();
 
   const channelNames = useSelector(channelsSelectors.selectChanelNames);
-
-  const hideModal = () => {
-    dispatch(modalsActions.setTypeModal(null));
-  };
 
   const inputRef = useRef();
   useEffect(() => {
@@ -46,16 +41,8 @@ export const Add = () => {
     onSubmit: (values) => {
       const name = filterProfanity.clean(values.name);
 
-      socketAPI.sendNewChannel({ name }, ({ status, data: { id } }) => {
-        formik.setSubmitting(false);
-        if (status === 'ok') {
-          hideModal();
-          dispatch(channelsActions.setCurrentChannelId(id));
-          dispatch(channelsActions.setHasAdd(true));
-          toast.success(t('toasts.add'));
-        } else {
-          toast.error(t('toasts.netWorkError'));
-        }
+      addChannel({ name }, () => {
+        hideModal();
       });
     },
   });

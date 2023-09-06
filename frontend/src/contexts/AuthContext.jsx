@@ -1,43 +1,91 @@
 /* eslint-disable import/prefer-default-export */
 import {
-  createContext, useCallback, useContext, useMemo, useState,
+  createContext, useContext, useMemo, useState,
 } from 'react';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
-const AuthContext = createContext({});
+const AuthContext = createContext();
 
-const getAuthHeader = () => {
-  const user = JSON.parse(localStorage.getItem('user'));
+export const AuthProvider = ({ children, httpClient }) => {
+  const currentUser = JSON.parse(localStorage.getItem('user'));
+  const [user, setUser] = useState(currentUser?.username || null);
 
-  if (user && user.token) {
-    return { Authorization: `Bearer ${user.token}` };
-  }
+  const [isLogInFailed, setIsLogInFailed] = useState(false);
+  const [isSignUpFailed, setIsSignUpFailed] = useState(false);
 
-  return {};
-};
+  const { t } = useTranslation();
 
-const getToken = () => {
-  const userId = JSON.parse(localStorage.getItem('user'));
-  return userId && userId.token;
-};
+  const providedData = useMemo(() => {
+    const logIn = async (username, password, cb) => {
+      setIsLogInFailed(false);
+      setIsSignUpFailed(false);
+      try {
+        const { data } = await httpClient.login(username, password);
+        localStorage.setItem('user', JSON.stringify(data));
+        setUser(data);
+      } catch (error) {
+        cb();
 
-export const AuthProvider = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState(getToken());
-  const [user, setUser] = useState({});
-  const logIn = useCallback(() => setLoggedIn(true), []);
-  const logOut = useCallback(() => {
-    localStorage.removeItem('user');
-    setLoggedIn(false);
-  }, []);
+        if (error.isHttpClient) {
+          const { status } = error.response;
+          if (status === 401) {
+            setIsLogInFailed(true);
+            return;
+          }
+          toast.error(t('toasts.netWorkError'));
+          return;
+        }
 
-  const providedData = useMemo(() => ({
-    loggedIn,
-    logIn,
-    logOut,
-  }), [
-    loggedIn,
-    logIn,
-    logOut,
-  ]);
+        throw error;
+      }
+    };
+
+    const signUp = async (username, password, cb) => {
+      setIsLogInFailed(false);
+      setIsSignUpFailed(false);
+      try {
+        const { data } = await httpClient.signup(username, password);
+        localStorage.setItem('user', JSON.stringify(data));
+        setUser(data);
+      } catch (error) {
+        cb();
+
+        if (error.isHttpClient) {
+          const { status } = error.response;
+          if (status === 409) {
+            setIsSignUpFailed(true);
+            return;
+          }
+          toast.error(t('toasts.netWorkError'));
+          return;
+        }
+
+        throw error;
+      }
+    };
+
+    const logOut = () => {
+      localStorage.removeItem('user');
+      setUser(null);
+    };
+
+    const getAuthHeader = () => {
+      const userData = JSON.parse(localStorage.getItem('user'));
+
+      return userData?.token ? { Authorization: `Bearer ${userData.token}` } : {};
+    };
+
+    return {
+      isLogInFailed,
+      isSignUpFailed,
+      user,
+      logIn,
+      signUp,
+      logOut,
+      getAuthHeader,
+    };
+  }, [httpClient, isLogInFailed, isSignUpFailed, t, user]);
 
   return (
     <AuthContext.Provider value={providedData}>

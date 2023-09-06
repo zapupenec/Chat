@@ -1,17 +1,14 @@
 /* eslint-disable import/prefer-default-export */
 import { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  Form, InputGroup, Button,
-} from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+import { Form, InputGroup, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 
 import { Icon } from '../../../../common-components';
-import { socketAPI } from '../../../../api';
-import { channelsSelectors, messagesActions } from '../../../../store/slices';
+import { channelsSelectors } from '../../../../store/slices';
 import { filterProfanity } from '../../../../lib';
+import { useAPI } from '../../../../contexts';
 
 const getUsername = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -20,7 +17,7 @@ const getUsername = () => {
 
 export const MessagesBoxFooter = () => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
+  const { sendMessage } = useAPI();
 
   const inputRef = useRef(null);
   useEffect(() => {
@@ -39,15 +36,11 @@ export const MessagesBoxFooter = () => {
         author: getUsername(),
         channelId: currentChannelId,
       };
-      socketAPI.sendNewMessage(message, ({ status }) => {
+
+      sendMessage(message, () => {
         formik.setSubmitting(false);
-        if (status === 'ok') {
-          dispatch(messagesActions.setHasAdd(true));
-          // eslint-disable-next-line no-param-reassign
-          values.body = '';
-        } else {
-          toast.error(t('toasts.netWorkError'));
-        }
+        // eslint-disable-next-line no-param-reassign
+        values.body = '';
       });
     },
   });

@@ -1,17 +1,15 @@
 /* eslint-disable import/prefer-default-export */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import {
   Container, Row, Col, Card, Form, FloatingLabel, Button, Image,
 } from 'react-bootstrap';
 import { object, ref, string } from 'yup';
 
-import { api } from '../../api';
 import signupImage from '../../assets/signup.jpg';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts';
 import { routes } from '../../routes';
 
 const getSchema = () => {
@@ -32,10 +30,8 @@ const getSchema = () => {
 
 export const SignupPage = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
-  const auth = useAuth();
-  const [authFailed, setAuthFailed] = useState(false);
+  const { isSignUpFailed, signUp } = useAuth();
 
   const inputRef = useRef(null);
   useEffect(() => {
@@ -49,35 +45,16 @@ export const SignupPage = () => {
       confirmPassword: '',
     },
     validationSchema: getSchema(),
-    onSubmit: async ({ username, password }) => {
-      setAuthFailed(false);
-      try {
-        const { data } = await api.signup(username, password);
-        auth.logIn();
-        localStorage.setItem('user', JSON.stringify(data));
-        navigate('/');
-      } catch (error) {
+    onSubmit: ({ username, password }) => {
+      signUp(username, password, () => {
+        formik.setSubmitting(false);
         inputRef.current.focus();
-        inputRef.current.select();
-        const { status } = error.response;
-
-        if (status >= 400) {
-          if (status === 409) {
-            setAuthFailed(true);
-            formik.errors.confirmPassword = t('errors.signup');
-            return;
-          }
-          toast.error(t('toasts.netWorkError'));
-          return;
-        }
-
-        throw error;
-      }
+      });
     },
   });
 
   const isValid = (fieldName) => (
-    (formik.touched[fieldName] && formik.errors[fieldName]) || authFailed
+    (formik.touched[fieldName] && formik.errors[fieldName]) || isSignUpFailed
   );
 
   return (
@@ -101,7 +78,7 @@ export const SignupPage = () => {
                     onChange={formik.handleChange}
                     required
                     ref={inputRef}
-                    // disabled={formik.isSubmitting}
+                    disabled={formik.isSubmitting}
                     isInvalid={isValid('username')}
                   />
                   <Form.Control.Feedback type="invalid" tooltip>
@@ -137,7 +114,7 @@ export const SignupPage = () => {
                     isInvalid={isValid('confirmPassword')}
                   />
                   <Form.Control.Feedback type="invalid" tooltip>
-                    {t(formik.errors.confirmPassword)}
+                    {isSignUpFailed ? t('errors.signup') : t(formik.errors.confirmPassword)}
                   </Form.Control.Feedback>
                 </FloatingLabel>
                 <Button
@@ -153,7 +130,7 @@ export const SignupPage = () => {
             <Card.Footer className="p-4">
               <div className="text-center">
                 <span>{t('signupPage.text')}</span>
-                <Link to={routes.login}>{t('signupPage.link')}</Link>
+                <Link to={routes.pages.login}>{t('signupPage.link')}</Link>
               </div>
             </Card.Footer>
           </Card>

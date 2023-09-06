@@ -1,7 +1,8 @@
-import { api } from './api';
-import { socketAPI } from './socketAPI';
+/* eslint-disable import/prefer-default-export */
+import { httpClient } from './httpClient';
+import { socket } from './socket';
 
 export {
-  api,
-  socketAPI,
+  httpClient,
+  socket,
 };

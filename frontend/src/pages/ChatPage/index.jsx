@@ -1,49 +1,51 @@
 /* eslint-disable import/prefer-default-export */
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Container, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
-import { api, socketAPI } from '../../api';
+import { httpClient } from '../../api';
 import { ChannelsBox, MessagesBox, Loading } from './components';
-import { messagesActions, channelsActions, channelsSelectors } from '../../store/slices';
+import { channelsActions, messagesActions } from '../../store/slices';
+import { useAuth } from '../../contexts';
 
 export const ChatPage = () => {
   const { t } = useTranslation();
-  const isLoading = useSelector(channelsSelectors.selectIsLoading);
+  const { logOut, getAuthHeader } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useDispatch();
   useEffect(() => {
-    socketAPI.connect();
+    const fetch = async () => {
+      try {
+        const { data } = await httpClient.fetchData(getAuthHeader());
+        const { channels, currentChannelId, messages } = data;
 
-    socketAPI.connectError(() => {
-      toast.error(t('toasts.netWorkError'));
-    });
+        dispatch(channelsActions.addChannels(channels));
+        dispatch(channelsActions.setCurrentChannelId(currentChannelId));
+        dispatch(channelsActions.setDedaultChannelId(currentChannelId));
+        dispatch(messagesActions.addMessages(messages));
 
-    socketAPI.recieveMessage((message) => {
-      dispatch(messagesActions.addMessage(message));
-    });
+        setIsLoading(false);
+      } catch (error) {
+        if (error.isHttpClient) {
+          const { status } = error.response;
+          if (status === 401) {
+            logOut();
+            toast.warn(t('toasts.notAuth'));
+            return;
+          }
+          toast.error(t('toasts.netWorkError'));
+          return;
+        }
 
-    socketAPI.recieveChannel((channel) => {
-      dispatch(channelsActions.addChannel(channel));
-    });
-
-    socketAPI.recieveRemoveChannel((channel) => {
-      dispatch(channelsActions.removeChannel(channel.id));
-    });
-
-    socketAPI.recieveRenameChannel((channel) => {
-      dispatch(channelsActions.updateChannel({ id: channel.id, changes: channel }));
-    });
-
-    dispatch(api.fetchData());
-
-    return () => {
-      socketAPI.unsubscribeAll();
-      socketAPI.disconnect();
+        throw error;
+      }
     };
-  }, [dispatch, t]);
+
+    fetch();
+  }, [dispatch, getAuthHeader, logOut, t]);
 
   if (isLoading) {
     return <Loading />;

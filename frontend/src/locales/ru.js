@@ -76,6 +76,7 @@ export const ru = {
       rename: 'Канал переименован',
       remove: 'Канал удалён',
       netWorkError: 'Ошибка сети',
+      notAuth: 'Авторизуйтесь повторно',
     },
   },
 };

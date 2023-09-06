@@ -1,24 +1,20 @@
 /* eslint-disable import/prefer-default-export */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Container, Row, Col, Card, Form, FloatingLabel, Button, Image,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 
-import { api } from '../../api';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts';
 import loginImage from '../../assets/login.jpg';
 import { routes } from '../../routes';
 
 export const LoginPage = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
-  const auth = useAuth();
-  const [authFailed, setAuthFailed] = useState(false);
+  const { isLogInFailed, logIn } = useAuth();
 
   const inputRef = useRef(null);
   useEffect(() => {
@@ -30,30 +26,11 @@ export const LoginPage = () => {
       username: '',
       password: '',
     },
-    onSubmit: async ({ username, password }) => {
-      setAuthFailed(false);
-      try {
-        const { data } = await api.login(username, password);
-        auth.logIn();
-        localStorage.setItem('user', JSON.stringify(data));
-        navigate('/');
-      } catch (error) {
+    onSubmit: ({ username, password }) => {
+      logIn(username, password, () => {
+        formik.setSubmitting(false);
         inputRef.current.focus();
-        inputRef.current.select();
-
-        const { status } = error.response;
-
-        if (status >= 400) {
-          if (status === 401) {
-            setAuthFailed(true);
-            return;
-          }
-          toast.error(t('toasts.netWorkError'));
-          return;
-        }
-
-        throw error;
-      }
+      });
     },
   });
 
@@ -78,8 +55,8 @@ export const LoginPage = () => {
                     value={formik.values.username}
                     onChange={formik.handleChange}
                     ref={inputRef}
-                    // disabled={formik.isSubmitting}
-                    isInvalid={authFailed}
+                    disabled={formik.isSubmitting}
+                    isInvalid={isLogInFailed}
                   />
                 </FloatingLabel>
                 <FloatingLabel className="mb-4" controlId="password" label={t('loginPage.fields.password')}>
@@ -92,7 +69,7 @@ export const LoginPage = () => {
                     value={formik.values.password}
                     onChange={formik.handleChange}
                     disabled={formik.isSubmitting}
-                    isInvalid={authFailed}
+                    isInvalid={isLogInFailed}
                   />
                   <Form.Control.Feedback type="invalid" tooltip>
                     {t('errors.login')}
@@ -111,7 +88,7 @@ export const LoginPage = () => {
             <Card.Footer className="p-4">
               <div className="text-center">
                 <span>{t('loginPage.text')}</span>
-                <Link to={routes.signup}>{t('loginPage.link')}</Link>
+                <Link to={routes.pages.signup}>{t('loginPage.link')}</Link>
               </div>
             </Card.Footer>
           </Card>

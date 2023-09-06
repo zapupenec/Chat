@@ -1,45 +1,40 @@
 /* eslint-disable import/prefer-default-export */
-import {
-  BrowserRouter, Routes, Route, Link,
-} from 'react-router-dom';
-import { Navbar, Container } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
-import { ToastContainer } from 'react-toastify';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { setLocale } from 'yup';
 
-import { AuthButton } from './common-components';
+import { Layout } from './layout';
 import {
-  ChatPage, LoginPage, NotFoundPage, SignupPage,
+  ChatPage, LoginPage, NotFoundPage, SignupPage, PrivateRoute,
 } from './pages';
-import { LoggedInRoute, PrivateRoute, routes } from './routes';
+import { routes } from './routes';
 import { locale } from './locales';
+import { socket } from './api';
+import { ApiProvider } from './contexts';
 
 export const App = () => {
   setLocale(locale);
-  const { t } = useTranslation();
 
   return (
-    <>
-      <div className="d-flex flex-column h-100">
-        <BrowserRouter>
-          <Navbar className="shadow-sm" bg="white">
-            <Container>
-              <Navbar.Brand as={Link} to={routes.main}>{t('header.logo')}</Navbar.Brand>
-              <AuthButton />
-            </Container>
-          </Navbar>
-          <Routes>
+    <BrowserRouter>
+      <Routes>
+        <Route path={routes.pages.main} element={<Layout />}>
+          <Route path={routes.pages.main} element={<PrivateRoute />}>
             <Route
-              path={routes.main}
-              element={<PrivateRoute><ChatPage /></PrivateRoute>}
+              path=""
+              element={(
+                <ApiProvider socket={socket}>
+                  <ChatPage />
+                </ApiProvider>
+              )}
             />
-            <Route path={routes.login} element={<LoggedInRoute><LoginPage /></LoggedInRoute>} />
-            <Route path={routes.signup} element={<LoggedInRoute><SignupPage /></LoggedInRoute>} />
-            <Route path={routes.notFound} element={<NotFoundPage />} />
-          </Routes>
-        </BrowserRouter>
-      </div>
-      <ToastContainer pauseOnFocusLoss={false} pauseOnHover={false} />
-    </>
+          </Route>
+          <Route path="" element={<PrivateRoute isLogged />}>
+            <Route path={routes.pages.login} element={<LoginPage />} />
+            <Route path={routes.pages.signup} element={<SignupPage />} />
+          </Route>
+          <Route path={routes.pages.notFound} element={<NotFoundPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 };

@@ -13,7 +13,7 @@ export const ChannelsBoxBody = () => {
   const hasAdd = useSelector(channelsSelectors.selectHasAdd);
   const scrollbarsRef = useRef(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   useEffect(() => {
     if (hasAdd) {
       scrollbarsRef.current.view.scroll({
@@ -22,7 +22,7 @@ export const ChannelsBoxBody = () => {
       });
       dispatch(channelsActions.setHasAdd(false));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [channels]);
 
   return (

@@ -1,33 +1,25 @@
 /* eslint-disable import/prefer-default-export */
 import { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 
-import { socketAPI } from '../../../../../api';
-import { modalsActions, modalsSelectors } from '../../../../../store/slices';
+import { modalsSelectors } from '../../../../../store/slices';
+import { useAPI } from '../../../../../contexts';
 
-export const Remove = () => {
+export const Remove = ({ hideModal }) => {
   const { t } = useTranslation();
+  const { removeChannel } = useAPI();
 
-  const dispatch = useDispatch();
   const id = useSelector(modalsSelectors.selectChannelId);
-  const hideModal = () => {
-    dispatch(modalsActions.setTypeModal(null));
-  };
 
   const handleRemove = () => {
-    socketAPI.sendRemoveChannel({ id }, ({ status }) => {
-      if (status === 'ok') {
-        hideModal();
-        toast.success(t('toasts.remove'));
-      } else {
-        toast.error(t('toasts.netWorkError'));
-      }
+    removeChannel(id, () => {
+      hideModal();
     });
   };
 
+  // не получается повесиь слушатель
   const btnRef = useRef(null);
   useEffect(() => {
     const handlePushEnter = (e) => {

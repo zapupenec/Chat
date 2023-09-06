@@ -1,15 +1,14 @@
 /* eslint-disable import/prefer-default-export */
 import { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { object, string } from 'yup';
 import { useFormik } from 'formik';
 
-import { socketAPI } from '../../../../../api';
-import { channelsSelectors, modalsActions, modalsSelectors } from '../../../../../store/slices';
+import { channelsSelectors, modalsSelectors } from '../../../../../store/slices';
 import { filterProfanity } from '../../../../../lib';
+import { useAPI } from '../../../../../contexts';
 
 const getSchema = (channelNames) => {
   const schema = object().shape({
@@ -23,17 +22,13 @@ const getSchema = (channelNames) => {
   return schema;
 };
 
-export const Rename = () => {
+export const Rename = ({ hideModal }) => {
+  const { renameChannel } = useAPI();
   const { t } = useTranslation();
 
   const channelNames = useSelector(channelsSelectors.selectChanelNames);
   const id = useSelector(modalsSelectors.selectChannelId);
   const channel = useSelector(channelsSelectors.selectChannelById(id));
-
-  const dispatch = useDispatch();
-  const hideModal = () => {
-    dispatch(modalsActions.setTypeModal(null));
-  };
 
   const formik = useFormik({
     initialValues: {
@@ -43,14 +38,8 @@ export const Rename = () => {
     onSubmit: (values) => {
       const name = filterProfanity.clean(values.name);
 
-      socketAPI.sendRenameChannel({ name, id }, ({ status }) => {
-        formik.setSubmitting(false);
-        if (status === 'ok') {
-          hideModal();
-          toast.success(t('toasts.rename'));
-        } else {
-          toast.error(t('toasts.netWorkError'));
-        }
+      renameChannel({ name, id }, () => {
+        hideModal();
       });
     },
   });
