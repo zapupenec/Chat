@@ -1,10 +1,10 @@
 [![Actions Status](https://github.com/zapupenec/frontend-project-12/workflows/hexlet-check/badge.svg)](https://github.com/zapupenec/frontend-project-12/actions)
 [![Maintainability](https://api.codeclimate.com/v1/badges/c7eace0d66aa98bd001c/maintainability)](https://codeclimate.com/github/zapupenec/frontend-project-12/maintainability)
 
-EN | [RU](https://github.com/zapupenec/frontend-project-12/blob/main/README-ru.md)
+[EN](https://github.com/zapupenec/frontend-project-12) | RU
 
-# [Сhat](https://frontend-project-12-zapupenec.up.railway.app)
-Simple chat with the ability to create channels.
+# [Чат](https://frontend-project-12-zapupenec.up.railway.app)
+Простой чат с возможность создавать отдельные каналы.
 
 ![screenshot-ru](/images/chat.png)
 
@@ -58,19 +58,19 @@ Simple chat with the ability to create channels.
   </a>
 </p>
 
-## Install for development
-Developed using Node.js v20.4.0.
+## Установка для разработки
+Во время разработки использовалась Node.js v20.4.0.
 
-Clone the repository locally.
+Скопируйте репозиторий локально.
 ```
 git clone https://github.com/zapupenec/frontend-project-12.git
 ```
-Install the dependencies.
+Установите зависимости.
 ```
 make install
 ```
-Run the app on the local server.
+Запустите приложение на локальном сервере.
 ```
 make start
 ```
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Откройте [http://localhost:3000](http://localhost:3000), чтобы просмотреть его в браузере.
