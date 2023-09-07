@@ -39,7 +39,7 @@ export const MessagesBoxBody = ({ messages }) => {
       onScroll={handleScroll}
       ref={scrollbarsRef}
     >
-      <div id="messages-box" className="chat-messages px-5 overflow-y-auto overflow-x-hidden">
+      <div id="messages-box" className="px-5">
         {messages.map((message) => <Message key={message.id} message={message} />)}
       </div>
     </Scrollbars>

@@ -5,6 +5,7 @@ import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { object, string } from 'yup';
 import { useFormik } from 'formik';
+import { toast } from 'react-toastify';
 
 import { channelsSelectors, modalsSelectors } from '../../../../../store/slices';
 import { filterProfanity } from '../../../../../lib';
@@ -23,7 +24,7 @@ const getSchema = (channelNames) => {
 };
 
 export const Rename = ({ hideModal }) => {
-  const { renameChannel } = useAPI();
+  const api = useAPI();
   const { t } = useTranslation();
 
   const channelNames = useSelector(channelsSelectors.selectChanelNames);
@@ -35,12 +36,15 @@ export const Rename = ({ hideModal }) => {
       name: channel.name,
     },
     validationSchema: getSchema(channelNames),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       const name = filterProfanity.clean(values.name);
-
-      renameChannel({ name, id }, () => {
+      try {
+        await api.renameChannel({ name, id });
+        toast.success(t('toasts.rename'));
         hideModal();
-      });
+      } catch (error) {
+        toast.error(t('toasts.netWorkError'));
+      }
     },
   });
 

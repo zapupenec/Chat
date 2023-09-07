@@ -5,21 +5,21 @@ import { Container, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
-import { httpClient } from '../../api';
 import { ChannelsBox, MessagesBox, Loading } from './components';
 import { channelsActions, messagesActions } from '../../store/slices';
-import { useAuth } from '../../contexts';
+import { useAPI, useAuth } from '../../contexts';
 
 export const ChatPage = () => {
   const { t } = useTranslation();
   const { logOut, getAuthHeader } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
+  const api = useAPI();
 
   const dispatch = useDispatch();
   useEffect(() => {
     const fetch = async () => {
       try {
-        const { data } = await httpClient.fetchData(getAuthHeader());
+        const { data } = await api.fetchData(getAuthHeader());
         const { channels, currentChannelId, messages } = data;
 
         dispatch(channelsActions.addChannels(channels));
@@ -29,7 +29,7 @@ export const ChatPage = () => {
 
         setIsLoading(false);
       } catch (error) {
-        if (error.isHttpClient) {
+        if (error.isAPI) {
           const { status } = error.response;
           if (status === 401) {
             logOut();
@@ -45,7 +45,7 @@ export const ChatPage = () => {
     };
 
     fetch();
-  }, [dispatch, getAuthHeader, logOut, t]);
+  }, [api, dispatch, getAuthHeader, logOut, t]);
 
   if (isLoading) {
     return <Loading />;

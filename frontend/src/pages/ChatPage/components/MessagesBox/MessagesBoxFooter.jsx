@@ -1,12 +1,13 @@
 /* eslint-disable import/prefer-default-export */
 import { useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
+import { toast } from 'react-toastify';
 
 import { Icon } from '../../../../common-components';
-import { channelsSelectors } from '../../../../store/slices';
+import { channelsSelectors, messagesActions } from '../../../../store/slices';
 import { filterProfanity } from '../../../../lib';
 import { useAPI } from '../../../../contexts';
 
@@ -17,7 +18,8 @@ const getUsername = () => {
 
 export const MessagesBoxFooter = () => {
   const { t } = useTranslation();
-  const { sendMessage } = useAPI();
+  const api = useAPI();
+  const dispatch = useDispatch();
 
   const inputRef = useRef(null);
   useEffect(() => {
@@ -30,18 +32,20 @@ export const MessagesBoxFooter = () => {
     initialValues: {
       body: '',
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       const message = {
         text: filterProfanity.clean(values.body.trim()),
         author: getUsername(),
         channelId: currentChannelId,
       };
 
-      sendMessage(message, () => {
-        formik.setSubmitting(false);
-        // eslint-disable-next-line no-param-reassign
-        values.body = '';
-      });
+      try {
+        await api.sendMessage(message);
+        dispatch(messagesActions.setHasAdd(true));
+        formik.resetForm();
+      } catch (error) {
+        toast.error(t('toasts.netWorkError'));
+      }
     },
   });
 

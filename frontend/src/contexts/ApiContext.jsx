@@ -5,8 +5,10 @@ import {
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 import { channelsActions, messagesActions } from '../store/slices';
+import { routes } from '../routes';
 
 const ApiContext = createContext({});
 
@@ -44,59 +46,38 @@ export const ApiProvider = ({ children, socket }) => {
   }, [dispatch, socket, t]);
 
   const providedData = useMemo(() => {
-    const sendMessage = (message, cb) => {
-      socket.emit('newMessage', message, ({ status }) => {
+    const promisify = (func) => (...args) => new Promise((resolve, reject) => {
+      func(...args, ({ data, status }) => {
         if (status === 'ok') {
-          dispatch(messagesActions.setHasAdd(true));
-          cb();
-        } else {
-          toast.error(t('toasts.netWorkError'));
+          resolve(data);
         }
+        reject();
       });
-    };
+    });
 
-    const addChannel = (data, cb) => {
-      socket.emit('newChannel', data, ({ status, data: { id } }) => {
-        if (status === 'ok') {
-          dispatch(channelsActions.setCurrentChannelId(id));
-          dispatch(channelsActions.setHasAdd(true));
-          toast.success(t('toasts.add'));
-          cb();
-        } else {
-          toast.error(t('toasts.netWorkError'));
-        }
-      });
-    };
-
-    const removeChannel = (id, cb) => {
-      socket.emit('removeChannel', { id }, ({ status }) => {
-        if (status === 'ok') {
-          cb();
-          toast.success(t('toasts.remove'));
-        } else {
-          toast.error(t('toasts.netWorkError'));
-        }
-      });
-    };
-
-    const renameChannel = (data, cb) => {
-      socket.emit('renameChannel', data, ({ status }) => {
-        if (status === 'ok') {
-          cb();
-          toast.success(t('toasts.rename'));
-        } else {
-          toast.error(t('toasts.netWorkError'));
-        }
-      });
+    const markError = (func) => async (arg) => {
+      try {
+        return await func(arg);
+      } catch (error) {
+        error.isAPI = true;
+        throw error;
+      }
     };
 
     return {
-      sendMessage,
-      addChannel,
-      removeChannel,
-      renameChannel,
+      sendMessage: promisify((...args) => socket.emit('newMessage', ...args)),
+      addChannel: promisify((...args) => socket.emit('newChannel', ...args)),
+      removeChannel: promisify((...args) => socket.emit('removeChannel', ...args)),
+      renameChannel: promisify((...args) => socket.emit('renameChannel', ...args)),
+      fetchData: markError((authHeader) => axios.get(routes.api.data, { headers: authHeader })),
+      logIn: markError(
+        (userData) => axios.post(routes.api.login, userData),
+      ),
+      signUp: markError(
+        (userData) => axios.post(routes.api.signup, userData),
+      ),
     };
-  }, [dispatch, t, socket]);
+  }, [socket]);
 
   return (
     <ApiContext.Provider value={providedData}>

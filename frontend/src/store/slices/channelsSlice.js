@@ -5,6 +5,7 @@ const channelsAdapter = createEntityAdapter();
 const initialState = channelsAdapter.getInitialState({
   currentChannelId: null,
   defaultChannelId: null,
+  isSwitchToDefault: false,
   hasAdd: false,
 });
 
@@ -18,12 +19,14 @@ const channelsSlice = createSlice({
     removeChannel: (state, { payload }) => {
       if (state.currentChannelId === payload) {
         state.currentChannelId = state.defaultChannelId;
+        state.isSwitchToDefault = true;
       }
       channelsAdapter.removeOne(state, payload);
     },
     setCurrentChannelId: (state, { payload }) => { state.currentChannelId = payload; },
     setDedaultChannelId: (state, { payload }) => { state.defaultChannelId = payload; },
     setHasAdd: (state, { payload }) => { state.hasAdd = payload; },
+    setIsSwitchToDefault: (state, { payload }) => { state.isSwitchToDefault = payload; },
   },
 });
 
@@ -32,6 +35,7 @@ const selectCurrentChannelId = (state) => state.channels.currentChannelId;
 
 const selectChannelById = (id) => (state) => selectorsAdapter.selectById(state, id);
 const selectHasAdd = (state) => state.channels.hasAdd;
+const selectIsSwitchToDefault = (state) => state.channels.isSwitchToDefault;
 
 const selectChanelNames = createSelector(selectorsAdapter.selectAll, (state) => {
   const chanelNames = state.map((c) => c.name);
@@ -44,6 +48,7 @@ export const selectors = {
   selectCurrentChannelId,
   selectChannelById,
   selectHasAdd,
+  selectIsSwitchToDefault,
   selectChanelNames,
 };
 export default channelsSlice.reducer;

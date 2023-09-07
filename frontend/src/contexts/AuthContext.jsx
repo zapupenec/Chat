@@ -5,11 +5,14 @@ import {
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
+import { useAPI } from './ApiContext';
+
 const AuthContext = createContext();
 
-export const AuthProvider = ({ children, httpClient }) => {
+export const AuthProvider = ({ children }) => {
   const currentUser = JSON.parse(localStorage.getItem('user'));
   const [user, setUser] = useState(currentUser?.username || null);
+  const api = useAPI();
 
   const [isLogInFailed, setIsLogInFailed] = useState(false);
   const [isSignUpFailed, setIsSignUpFailed] = useState(false);
@@ -17,17 +20,17 @@ export const AuthProvider = ({ children, httpClient }) => {
   const { t } = useTranslation();
 
   const providedData = useMemo(() => {
-    const logIn = async (username, password, cb) => {
+    const logIn = async (userData, cb) => {
       setIsLogInFailed(false);
       setIsSignUpFailed(false);
       try {
-        const { data } = await httpClient.login(username, password);
+        const { data } = await api.logIn(userData);
         localStorage.setItem('user', JSON.stringify(data));
         setUser(data);
       } catch (error) {
         cb();
 
-        if (error.isHttpClient) {
+        if (error.isAPI) {
           const { status } = error.response;
           if (status === 401) {
             setIsLogInFailed(true);
@@ -41,17 +44,17 @@ export const AuthProvider = ({ children, httpClient }) => {
       }
     };
 
-    const signUp = async (username, password, cb) => {
+    const signUp = async (userData, cb) => {
       setIsLogInFailed(false);
       setIsSignUpFailed(false);
       try {
-        const { data } = await httpClient.signup(username, password);
+        const { data } = await api.signUp(userData);
         localStorage.setItem('user', JSON.stringify(data));
         setUser(data);
       } catch (error) {
         cb();
 
-        if (error.isHttpClient) {
+        if (error.isAPI) {
           const { status } = error.response;
           if (status === 409) {
             setIsSignUpFailed(true);
@@ -72,7 +75,6 @@ export const AuthProvider = ({ children, httpClient }) => {
 
     const getAuthHeader = () => {
       const userData = JSON.parse(localStorage.getItem('user'));
-
       return userData?.token ? { Authorization: `Bearer ${userData.token}` } : {};
     };
 
@@ -85,7 +87,7 @@ export const AuthProvider = ({ children, httpClient }) => {
       logOut,
       getAuthHeader,
     };
-  }, [httpClient, isLogInFailed, isSignUpFailed, t, user]);
+  }, [api, isLogInFailed, isSignUpFailed, t, user]);
 
   return (
     <AuthContext.Provider value={providedData}>

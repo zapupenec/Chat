@@ -3,20 +3,25 @@ import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 import { modalsSelectors } from '../../../../../store/slices';
 import { useAPI } from '../../../../../contexts';
 
 export const Remove = ({ hideModal }) => {
   const { t } = useTranslation();
-  const { removeChannel } = useAPI();
+  const api = useAPI();
 
   const id = useSelector(modalsSelectors.selectChannelId);
 
-  const handleRemove = () => {
-    removeChannel(id, () => {
+  const handleRemove = async () => {
+    try {
+      await api.removeChannel({ id });
+      toast.success(t('toasts.remove'));
       hideModal();
-    });
+    } catch (error) {
+      toast.error(t('toasts.netWorkError'));
+    }
   };
 
   // не получается повесиь слушатель
@@ -33,7 +38,7 @@ export const Remove = ({ hideModal }) => {
     return () => {
       current.removeEventListener('keyup', handlePushEnter);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

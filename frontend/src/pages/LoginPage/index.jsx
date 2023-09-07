@@ -26,8 +26,8 @@ export const LoginPage = () => {
       username: '',
       password: '',
     },
-    onSubmit: ({ username, password }) => {
-      logIn(username, password, () => {
+    onSubmit: (values) => {
+      logIn(values, () => {
         formik.setSubmitting(false);
         inputRef.current.focus();
       });

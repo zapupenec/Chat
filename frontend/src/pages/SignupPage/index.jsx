@@ -30,7 +30,6 @@ const getSchema = () => {
 
 export const SignupPage = () => {
   const { t } = useTranslation();
-
   const { isSignUpFailed, signUp } = useAuth();
 
   const inputRef = useRef(null);
@@ -46,7 +45,7 @@ export const SignupPage = () => {
     },
     validationSchema: getSchema(),
     onSubmit: ({ username, password }) => {
-      signUp(username, password, () => {
+      signUp({ username, password }, () => {
         formik.setSubmitting(false);
         inputRef.current.focus();
       });

@@ -9,12 +9,20 @@ import { Channel } from './Channel';
 
 export const ChannelsBoxBody = () => {
   const channels = useSelector(channelsSelectors.selectAll);
-
   const hasAdd = useSelector(channelsSelectors.selectHasAdd);
+  const isSwitchToDefault = useSelector(channelsSelectors.selectIsSwitchToDefault);
   const scrollbarsRef = useRef(null);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
+    if (isSwitchToDefault) {
+      scrollbarsRef.current.view.scroll({
+        top: 0,
+        behavior: 'smooth',
+      });
+      dispatch(channelsActions.setIsSwitchToDefault(false));
+    }
+
     if (hasAdd) {
       scrollbarsRef.current.view.scroll({
         top: scrollbarsRef.current.getScrollHeight(),
@@ -22,24 +30,22 @@ export const ChannelsBoxBody = () => {
       });
       dispatch(channelsActions.setHasAdd(false));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [channels]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [channels, isSwitchToDefault]);
 
   return (
     <Scrollbars
       style={{ width: '100%', height: '100%' }}
       ref={scrollbarsRef}
     >
-      <div className="h-100">
-        <Nav
-          as="ul"
-          variant="pills"
-          id="channels-box"
-          className="flex-column px-2 h-100 d-block overflow-y-auto overflow-x-hidden"
-        >
-          {channels.map((channel) => <Channel key={channel.id} channel={channel} />)}
-        </Nav>
-      </div>
+      <Nav
+        as="ul"
+        variant="pills"
+        id="channels-box"
+        className="px-2"
+      >
+        {channels.map((channel) => <Channel key={channel.id} channel={channel} />)}
+      </Nav>
     </Scrollbars>
   );
 };
