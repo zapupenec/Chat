@@ -24,21 +24,9 @@ export const Remove = ({ hideModal }) => {
     }
   };
 
-  // не получается повесиь слушатель
   const btnRef = useRef(null);
   useEffect(() => {
-    const handlePushEnter = (e) => {
-      if (e.key === 'Enter') {
-        handleRemove();
-      }
-    };
-
-    const { current } = btnRef;
-    current.addEventListener('keyup', handlePushEnter);
-    return () => {
-      current.removeEventListener('keyup', handlePushEnter);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    btnRef.current.focus();
   }, []);
 
   return (

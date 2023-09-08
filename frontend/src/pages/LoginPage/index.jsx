@@ -13,13 +13,9 @@ import { routes } from '../../routes';
 
 export const LoginPage = () => {
   const { t } = useTranslation();
-
   const { isLogInFailed, logIn } = useAuth();
 
   const inputRef = useRef(null);
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -29,10 +25,13 @@ export const LoginPage = () => {
     onSubmit: (values) => {
       logIn(values, () => {
         formik.setSubmitting(false);
-        inputRef.current.focus();
       });
     },
   });
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, [formik.isSubmitting]);
 
   return (
     <Container fluid className="h-100">
@@ -45,44 +44,43 @@ export const LoginPage = () => {
               </Col>
               <Form className="col col-md-6" onSubmit={formik.handleSubmit} noValidate>
                 <h1 className="text-center mb-4">{t('loginPage.title')}</h1>
-                <FloatingLabel className="mb-3" controlId="username" label={t('loginPage.fields.username')}>
-                  <Form.Control
-                    type="username"
-                    placeholder={t('loginPage.fields.username')}
-                    name="username"
-                    autoComplete="username"
-                    required
-                    value={formik.values.username}
-                    onChange={formik.handleChange}
-                    ref={inputRef}
-                    disabled={formik.isSubmitting}
-                    isInvalid={isLogInFailed}
-                  />
-                </FloatingLabel>
-                <FloatingLabel className="mb-4" controlId="password" label={t('loginPage.fields.password')}>
-                  <Form.Control
-                    type="password"
-                    placeholder={t('loginPage.fields.password')}
-                    name="password"
-                    autoComplete="current-password"
-                    required
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    disabled={formik.isSubmitting}
-                    isInvalid={isLogInFailed}
-                  />
-                  <Form.Control.Feedback type="invalid" tooltip>
-                    {t('errors.login')}
-                  </Form.Control.Feedback>
-                </FloatingLabel>
-                <Button
-                  variant="outline-primary"
-                  type="submit"
-                  className="w-100"
-                  disabled={formik.isSubmitting}
-                >
-                  {t('buttons.login')}
-                </Button>
+                <fieldset disabled={formik.isSubmitting}>
+                  <FloatingLabel className="mb-3" controlId="username" label={t('loginPage.fields.username')}>
+                    <Form.Control
+                      type="username"
+                      placeholder={t('loginPage.fields.username')}
+                      name="username"
+                      autoComplete="username"
+                      required
+                      value={formik.values.username}
+                      onChange={formik.handleChange}
+                      ref={inputRef}
+                      isInvalid={isLogInFailed}
+                    />
+                  </FloatingLabel>
+                  <FloatingLabel className="mb-4" controlId="password" label={t('loginPage.fields.password')}>
+                    <Form.Control
+                      type="password"
+                      placeholder={t('loginPage.fields.password')}
+                      name="password"
+                      autoComplete="current-password"
+                      required
+                      value={formik.values.password}
+                      onChange={formik.handleChange}
+                      isInvalid={isLogInFailed}
+                    />
+                    <Form.Control.Feedback type="invalid" tooltip>
+                      {t('errors.login')}
+                    </Form.Control.Feedback>
+                  </FloatingLabel>
+                  <Button
+                    variant="outline-primary"
+                    type="submit"
+                    className="w-100"
+                  >
+                    {t('buttons.login')}
+                  </Button>
+                </fieldset>
               </Form>
             </Card.Body>
             <Card.Footer className="p-4">

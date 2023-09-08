@@ -33,9 +33,6 @@ export const SignupPage = () => {
   const { isSignUpFailed, signUp } = useAuth();
 
   const inputRef = useRef(null);
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -47,10 +44,13 @@ export const SignupPage = () => {
     onSubmit: ({ username, password }) => {
       signUp({ username, password }, () => {
         formik.setSubmitting(false);
-        inputRef.current.focus();
       });
     },
   });
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, [formik.isSubmitting]);
 
   const isValid = (fieldName) => (
     (formik.touched[fieldName] && formik.errors[fieldName]) || isSignUpFailed
@@ -67,63 +67,61 @@ export const SignupPage = () => {
               </Col>
               <Form className="col col-md-6" onSubmit={formik.handleSubmit} noValidate>
                 <h1 className="text-center mb-4">{t('signupPage.title')}</h1>
-                <FloatingLabel className="mb-3" controlId="username" label={t('signupPage.fields.username')}>
-                  <Form.Control
-                    type="username"
-                    placeholder={t('signupPage.fields.username')}
-                    name="username"
-                    autoComplete="username"
-                    value={formik.values.username}
-                    onChange={formik.handleChange}
-                    required
-                    ref={inputRef}
-                    disabled={formik.isSubmitting}
-                    isInvalid={isValid('username')}
-                  />
-                  <Form.Control.Feedback type="invalid" tooltip>
-                    {t(formik.errors.username)}
-                  </Form.Control.Feedback>
-                </FloatingLabel>
-                <FloatingLabel className="mb-3" controlId="password" label={t('signupPage.fields.password')}>
-                  <Form.Control
-                    type="password"
-                    placeholder={t('signupPage.fields.password')}
-                    name="password"
-                    autoComplete="new-password"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    required
-                    disabled={formik.isSubmitting}
-                    isInvalid={isValid('password')}
-                  />
-                  <Form.Control.Feedback type="invalid" tooltip>
-                    {t(formik.errors.password)}
-                  </Form.Control.Feedback>
-                </FloatingLabel>
-                <FloatingLabel className="mb-4" controlId="confirmPassword" label={t('signupPage.fields.confirmPassword')}>
-                  <Form.Control
-                    type="password"
-                    placeholder={t('signupPage.fields.confirmPassword')}
-                    name="confirmPassword"
-                    autoComplete="new-password"
-                    value={formik.values.confirmPassword}
-                    onChange={formik.handleChange}
-                    required
-                    disabled={formik.isSubmitting}
-                    isInvalid={isValid('confirmPassword')}
-                  />
-                  <Form.Control.Feedback type="invalid" tooltip>
-                    {isSignUpFailed ? t('errors.signup') : t(formik.errors.confirmPassword)}
-                  </Form.Control.Feedback>
-                </FloatingLabel>
-                <Button
-                  variant="outline-primary"
-                  type="submit"
-                  className="w-100"
-                  disabled={formik.isSubmitting}
-                >
-                  {t('buttons.signup')}
-                </Button>
+                <fieldset disabled={formik.isSubmitting}>
+                  <FloatingLabel className="mb-3" controlId="username" label={t('signupPage.fields.username')}>
+                    <Form.Control
+                      type="username"
+                      placeholder={t('signupPage.fields.username')}
+                      name="username"
+                      autoComplete="username"
+                      value={formik.values.username}
+                      onChange={formik.handleChange}
+                      required
+                      ref={inputRef}
+                      isInvalid={isValid('username')}
+                    />
+                    <Form.Control.Feedback type="invalid" tooltip>
+                      {t(formik.errors.username)}
+                    </Form.Control.Feedback>
+                  </FloatingLabel>
+                  <FloatingLabel className="mb-3" controlId="password" label={t('signupPage.fields.password')}>
+                    <Form.Control
+                      type="password"
+                      placeholder={t('signupPage.fields.password')}
+                      name="password"
+                      autoComplete="new-password"
+                      value={formik.values.password}
+                      onChange={formik.handleChange}
+                      required
+                      isInvalid={isValid('password')}
+                    />
+                    <Form.Control.Feedback type="invalid" tooltip>
+                      {t(formik.errors.password)}
+                    </Form.Control.Feedback>
+                  </FloatingLabel>
+                  <FloatingLabel className="mb-4" controlId="confirmPassword" label={t('signupPage.fields.confirmPassword')}>
+                    <Form.Control
+                      type="password"
+                      placeholder={t('signupPage.fields.confirmPassword')}
+                      name="confirmPassword"
+                      autoComplete="new-password"
+                      value={formik.values.confirmPassword}
+                      onChange={formik.handleChange}
+                      required
+                      isInvalid={isValid('confirmPassword')}
+                    />
+                    <Form.Control.Feedback type="invalid" tooltip>
+                      {isSignUpFailed ? t('errors.signup') : t(formik.errors.confirmPassword)}
+                    </Form.Control.Feedback>
+                  </FloatingLabel>
+                  <Button
+                    variant="outline-primary"
+                    type="submit"
+                    className="w-100"
+                  >
+                    {t('buttons.signup')}
+                  </Button>
+                </fieldset>
               </Form>
             </Card.Body>
             <Card.Footer className="p-4">
