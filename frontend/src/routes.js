@@ -11,6 +11,7 @@ const routes = {
     main: '/',
     login: '/login',
     signup: '/signup',
+    error: '/error',
     notFound: '*',
   },
 };

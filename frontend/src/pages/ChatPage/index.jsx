@@ -1,53 +1,44 @@
 /* eslint-disable import/prefer-default-export */
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Container, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 import { ChannelsBox, MessagesBox, Loading } from './components';
-import { channelsActions, messagesActions } from '../../store/slices';
+import { initSelectors } from '../../store/slices';
 import { useAPI, useAuth } from '../../contexts';
+import { routes } from '../../routes';
 
 export const ChatPage = () => {
   const { t } = useTranslation();
-  const { logOut, getAuthHeader } = useAuth();
-  const [isLoading, setIsLoading] = useState(true);
-  const api = useAPI();
 
-  const dispatch = useDispatch();
+  const { logOut, getAuthHeader } = useAuth();
+  const loadingStatus = useSelector(initSelectors.selectLoadingStatus);
+
+  const api = useAPI();
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetch = async () => {
       try {
-        const { data } = await api.fetchData(getAuthHeader());
-        const { channels, currentChannelId, messages } = data;
-
-        dispatch(channelsActions.addChannels(channels));
-        dispatch(channelsActions.setCurrentChannelId(currentChannelId));
-        dispatch(channelsActions.setDedaultChannelId(currentChannelId));
-        dispatch(messagesActions.addMessages(messages));
-
-        setIsLoading(false);
+        await api.fetchData(getAuthHeader());
       } catch (error) {
-        if (error.isAPI) {
-          const { status } = error.response;
-          if (status === 401) {
-            logOut();
-            toast.warn(t('toasts.notAuth'));
-            return;
-          }
-          toast.error(t('toasts.netWorkError'));
+        if (error.response?.status === 401) {
+          logOut();
+          toast.warn(t('toasts.notAuth'));
           return;
         }
-
-        throw error;
+        api.setError(error);
+        navigate(routes.pages.error);
       }
     };
 
     fetch();
-  }, [api, dispatch, getAuthHeader, logOut, t]);
+  }, [api, getAuthHeader, logOut, navigate, t]);
 
-  if (isLoading) {
+  if (loadingStatus !== 'idle') {
     return <Loading />;
   }
 

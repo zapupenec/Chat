@@ -13,38 +13,37 @@ const modals = {
   remove: Remove,
   rename: Rename,
 };
-const getBody = (typeModal, hideModal) => {
-  const Component = modals[typeModal];
-  return <Component hideModal={hideModal} />;
-};
 
 export const CustomModal = () => {
   const { t } = useTranslation();
-  const typeModal = useSelector(modalsSelectors.selectTypeModal);
+  const isShowen = useSelector(modalsSelectors.selectIsShowen);
+  const typeModal = useSelector(modalsSelectors.selectType);
 
   const dispatch = useDispatch();
   const hideModal = () => {
-    dispatch(modalsActions.setTypeModal(null));
+    dispatch(modalsActions.closeModal());
   };
 
-  if (!typeModal) {
-    return null;
-  }
+  const Component = modals[typeModal];
 
   return (
     <Modal
       centered
-      show
+      show={isShowen}
       onHide={hideModal}
     >
-      <Modal.Header closeButton>
-        <Modal.Title>
-          {t(`modals.${typeModal}`)}
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        {getBody(typeModal, hideModal)}
-      </Modal.Body>
+      {isShowen && (
+        <>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              {t(`modals.${typeModal}`)}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {typeModal && <Component hideModal={hideModal} />}
+          </Modal.Body>
+        </>
+      )}
     </Modal>
   );
 };

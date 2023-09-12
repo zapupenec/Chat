@@ -4,10 +4,10 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../contexts';
 import { routes } from '../routes';
 
-export const PrivateRoute = ({ isLogged }) => {
+export const PrivateRoute = ({ hasAccess }) => {
   const { user } = useAuth();
 
-  if (isLogged) {
+  if (hasAccess) {
     return (
       user ? <Navigate to={routes.pages.main} /> : <Outlet />
     );

@@ -5,17 +5,28 @@ export const resources = { ru };
 
 export const locale = {
   string: {
-    min: ({ min }) => {
-      switch (min) {
-        case 3:
-          return 'errors.min3max20';
-        case 6:
-          return 'errors.min6';
+    min: ({ path }) => {
+      switch (path) {
+        case 'name':
+          return 'errors.channelNameLength';
+        case 'username':
+          return 'errors.usernameLength';
+        case 'password':
+          return 'errors.passwordLength';
         default:
-          throw new Error(`Unknown value min: ${min}`);
+          throw new Error(`Unknown path: ${path}`);
       }
     },
-    max: 'errors.min3max20',
+    max: ({ path }) => {
+      switch (path) {
+        case 'name':
+          return 'errors.channelNameLength';
+        case 'username':
+          return 'errors.usernameLength';
+        default:
+          throw new Error(`Unknown path: ${path}`);
+      }
+    },
   },
   mixed: {
     required: 'errors.required',

@@ -4,7 +4,7 @@
 EN | [RU](https://github.com/zapupenec/frontend-project-12/blob/main/README-ru.md)
 
 # [Сhat](https://frontend-project-12-zapupenec.up.railway.app)
-Simple chat with the ability to create channels.
+Single page application. Simple chat with the ability to create, rename and delete channels.
 
 ![screenshot-ru](/images/chat.png)
 

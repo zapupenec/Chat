@@ -4,7 +4,7 @@
 [EN](https://github.com/zapupenec/frontend-project-12) | RU
 
 # [Чат](https://frontend-project-12-zapupenec.up.railway.app)
-Простой чат с возможность создавать отдельные каналы.
+Одностраничное приложение. Простой чат с возможностью создавать, переименовывать и удалять каналы.
 
 ![screenshot-ru](/images/chat.png)
 

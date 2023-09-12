@@ -6,9 +6,9 @@ import { useTranslation } from 'react-i18next';
 import { object, string } from 'yup';
 import { useFormik } from 'formik';
 import { toast } from 'react-toastify';
+import profanityFilter from 'leo-profanity';
 
 import { channelsSelectors, modalsSelectors } from '../../../../../store/slices';
-import { filterProfanity } from '../../../../../lib';
 import { useAPI } from '../../../../../contexts';
 
 const getSchema = (channelNames) => {
@@ -37,7 +37,7 @@ export const Rename = ({ hideModal }) => {
     },
     validationSchema: getSchema(channelNames),
     onSubmit: async (values) => {
-      const name = filterProfanity.clean(values.name);
+      const name = profanityFilter.clean(values.name);
       try {
         await api.renameChannel({ name, id });
         toast.success(t('toasts.rename'));

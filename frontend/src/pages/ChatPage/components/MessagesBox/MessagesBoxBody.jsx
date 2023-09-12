@@ -1,12 +1,10 @@
 /* eslint-disable import/prefer-default-export */
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 
 import { Message } from './Message';
-import { messagesActions, messagesSelectors } from '../../../../store/slices';
 
-export const MessagesBoxBody = ({ messages }) => {
+export const MessagesBoxBody = ({ messages, hasMessageAdd, setHasMessageAdd }) => {
   const [isAutoScroll, setIsAutoScroll] = useState(true);
 
   const scrollbarsRef = useRef(null);
@@ -19,19 +17,16 @@ export const MessagesBoxBody = ({ messages }) => {
     }
   };
 
-  const dispatch = useDispatch();
-  const hasAdd = useSelector(messagesSelectors.selectHasAdd);
-
   useEffect(() => {
-    if (hasAdd || isAutoScroll) {
+    if (hasMessageAdd || isAutoScroll) {
       scrollbarsRef.current.view.scroll({
         top: scrollbarsRef.current.getScrollHeight(),
         behavior: 'smooth',
       });
-      dispatch(messagesActions.setHasAdd(false));
+      setHasMessageAdd(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messages]);
+  }, [messages.length]);
 
   return (
     <Scrollbars

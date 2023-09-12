@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Container, Navbar } from 'react-bootstrap';
 
-import { AuthButton } from '../../common-components';
-import { routes } from '../../routes';
+import { AuthButton } from '../../AuthButton';
+import { routes } from '../../../routes';
 
 export const Header = () => {
   const { t } = useTranslation();

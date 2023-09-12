@@ -5,6 +5,7 @@ import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 import { io } from 'socket.io-client';
 import i18next from 'i18next';
 import { setLocale } from 'yup';
+import profanityFilter from 'leo-profanity';
 
 import { ApiProvider, AuthProvider } from './contexts';
 import { store } from './store';
@@ -12,6 +13,9 @@ import { locale, resources } from './locales';
 import { App } from './App';
 
 export const init = () => {
+  profanityFilter.add(profanityFilter.getDictionary('fr'));
+  profanityFilter.add(profanityFilter.getDictionary('ru'));
+
   i18next
     .use(initReactI18next)
     .init({

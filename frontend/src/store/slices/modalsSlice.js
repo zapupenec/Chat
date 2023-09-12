@@ -2,7 +2,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  typeModal: null,
+  isShowen: false,
+  type: null,
   channelId: null,
 };
 
@@ -10,17 +11,28 @@ const messagesSlice = createSlice({
   name: 'modals',
   initialState,
   reducers: {
-    setTypeModal: (state, { payload }) => { state.typeModal = payload; },
-    setChannelId: (state, { payload }) => { state.channelId = payload; },
+    openModal: (state, { payload }) => {
+      const { type, channelId } = payload;
+      state.isShowen = true;
+      state.type = type;
+      state.channelId = channelId;
+    },
+    closeModal: (state) => {
+      state.isShowen = false;
+      state.type = null;
+      state.channelId = null;
+    },
   },
 });
 
-const selectTypeModal = (state) => state.modals.typeModal;
+const selectIsShowen = (state) => state.modals.isShowen;
+const selectType = (state) => state.modals.type;
 const selectChannelId = (state) => state.modals.channelId;
 
 export const { actions } = messagesSlice;
 export const selectors = {
-  selectTypeModal,
+  selectIsShowen,
+  selectType,
   selectChannelId,
 };
 export default messagesSlice.reducer;

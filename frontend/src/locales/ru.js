@@ -28,6 +28,9 @@ export const ru = {
       history: 'История',
       noLimit: 'б/о',
     },
+    errorPage: {
+      title: 'Упс! Что-пошло не так =(',
+    },
     notFoundPage: {
       title: 'Страница не найдена',
       text: 'Но вы можете перейти ',
@@ -61,10 +64,12 @@ export const ru = {
       cancel: 'Отменить',
       remove: 'Удалить',
       rename: 'Переименовать',
+      refresh: 'Обновить страницу',
     },
     errors: {
-      min3max20: 'От 3 до 20 символов',
-      min6: 'Не менее 6 символов',
+      usernameLength: 'От 3 до 20 символов',
+      channelNameLength: 'От 3 до 20 символов',
+      passwordLength: 'Не менее 6 символов',
       required: 'Обязательное поле',
       passwordNotMatch: 'Пароли должны совпадать',
       login: 'Неверные имя пользователя или пароль',

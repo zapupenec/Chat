@@ -1,7 +1,2 @@
-import { AuthButton } from './AuthButton';
-import { Icon } from './Icon';
-
-export {
-  AuthButton,
-  Icon,
-};
+export { AuthButton } from './AuthButton';
+export { Icon } from './Icon';

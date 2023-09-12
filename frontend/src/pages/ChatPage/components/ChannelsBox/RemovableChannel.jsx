@@ -14,8 +14,7 @@ export const RemovableChannel = ({ channel, handleClickChannel }) => {
 
   const dispatch = useDispatch();
   const showModal = (type) => () => {
-    dispatch(modalsActions.setTypeModal(type));
-    dispatch(modalsActions.setChannelId(id));
+    dispatch(modalsActions.openModal({ type, channelId: id }));
   };
 
   return (

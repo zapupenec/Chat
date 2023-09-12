@@ -1,12 +1,11 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createEntityAdapter, createSelector } from '@reduxjs/toolkit';
 
+import { fetchData } from './initSlice';
+
 const channelsAdapter = createEntityAdapter();
 const initialState = channelsAdapter.getInitialState({
   currentChannelId: null,
-  defaultChannelId: null,
-  isSwitchToDefault: false,
-  hasAdd: false,
 });
 
 const channelsSlice = createSlice({
@@ -18,15 +17,20 @@ const channelsSlice = createSlice({
     updateChannel: channelsAdapter.updateOne,
     removeChannel: (state, { payload }) => {
       if (state.currentChannelId === payload) {
-        state.currentChannelId = state.defaultChannelId;
-        state.isSwitchToDefault = true;
+        const id = state.ids[0];
+        state.currentChannelId = id;
       }
       channelsAdapter.removeOne(state, payload);
     },
     setCurrentChannelId: (state, { payload }) => { state.currentChannelId = payload; },
-    setDedaultChannelId: (state, { payload }) => { state.defaultChannelId = payload; },
-    setHasAdd: (state, { payload }) => { state.hasAdd = payload; },
-    setIsSwitchToDefault: (state, { payload }) => { state.isSwitchToDefault = payload; },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchData.fulfilled, (state, action) => {
+        const { channels, currentChannelId } = action.payload;
+        channelsAdapter.addMany(state, channels);
+        state.currentChannelId = currentChannelId;
+      });
   },
 });
 
@@ -34,8 +38,6 @@ const selectorsAdapter = channelsAdapter.getSelectors((state) => state.channels)
 const selectCurrentChannelId = (state) => state.channels.currentChannelId;
 
 const selectChannelById = (id) => (state) => selectorsAdapter.selectById(state, id);
-const selectHasAdd = (state) => state.channels.hasAdd;
-const selectIsSwitchToDefault = (state) => state.channels.isSwitchToDefault;
 
 const selectChanelNames = createSelector(selectorsAdapter.selectAll, (state) => {
   const chanelNames = state.map((c) => c.name);
@@ -47,8 +49,6 @@ export const selectors = {
   ...selectorsAdapter,
   selectCurrentChannelId,
   selectChannelById,
-  selectHasAdd,
-  selectIsSwitchToDefault,
   selectChanelNames,
 };
 export default channelsSlice.reducer;

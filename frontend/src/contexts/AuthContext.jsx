@@ -2,8 +2,6 @@
 import {
   createContext, useContext, useMemo, useState,
 } from 'react';
-import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 
 import { useAPI } from './ApiContext';
 
@@ -14,57 +12,15 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(currentUser?.username || null);
   const api = useAPI();
 
-  const [isLogInFailed, setIsLogInFailed] = useState(false);
-  const [isSignUpFailed, setIsSignUpFailed] = useState(false);
-
-  const { t } = useTranslation();
-
   const providedData = useMemo(() => {
-    const logIn = async (userData, cb) => {
-      setIsLogInFailed(false);
-      setIsSignUpFailed(false);
+    const handleAPI = (func) => async (userData) => {
       try {
-        const { data } = await api.logIn(userData);
+        const { data } = await func(userData);
         localStorage.setItem('user', JSON.stringify(data));
         setUser(data);
+        return true;
       } catch (error) {
-        cb();
-
-        if (error.isAPI) {
-          const { status } = error.response;
-          if (status === 401) {
-            setIsLogInFailed(true);
-            return;
-          }
-          toast.error(t('toasts.netWorkError'));
-          return;
-        }
-
-        throw error;
-      }
-    };
-
-    const signUp = async (userData, cb) => {
-      setIsLogInFailed(false);
-      setIsSignUpFailed(false);
-      try {
-        const { data } = await api.signUp(userData);
-        localStorage.setItem('user', JSON.stringify(data));
-        setUser(data);
-      } catch (error) {
-        cb();
-
-        if (error.isAPI) {
-          const { status } = error.response;
-          if (status === 409) {
-            setIsSignUpFailed(true);
-            return;
-          }
-          toast.error(t('toasts.netWorkError'));
-          return;
-        }
-
-        throw error;
+        return Promise.reject(error);
       }
     };
 
@@ -79,15 +35,13 @@ export const AuthProvider = ({ children }) => {
     };
 
     return {
-      isLogInFailed,
-      isSignUpFailed,
       user,
-      logIn,
-      signUp,
+      logIn: handleAPI((userData) => api.logIn(userData)),
+      signUp: handleAPI((userData) => api.signUp(userData)),
       logOut,
       getAuthHeader,
     };
-  }, [api, isLogInFailed, isSignUpFailed, t, user]);
+  }, [api, user]);
 
   return (
     <AuthContext.Provider value={providedData}>

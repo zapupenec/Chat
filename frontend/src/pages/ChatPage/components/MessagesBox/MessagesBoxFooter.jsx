@@ -1,14 +1,14 @@
 /* eslint-disable import/prefer-default-export */
 import { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import { toast } from 'react-toastify';
+import profanityFilter from 'leo-profanity';
 
 import { Icon } from '../../../../common-components';
-import { channelsSelectors, messagesActions } from '../../../../store/slices';
-import { filterProfanity } from '../../../../lib';
+import { channelsSelectors } from '../../../../store/slices';
 import { useAPI } from '../../../../contexts';
 
 const getUsername = () => {
@@ -16,10 +16,9 @@ const getUsername = () => {
   return user.username;
 };
 
-export const MessagesBoxFooter = () => {
+export const MessagesBoxFooter = ({ setHasMessageAdd }) => {
   const { t } = useTranslation();
   const api = useAPI();
-  const dispatch = useDispatch();
 
   const inputRef = useRef(null);
   useEffect(() => {
@@ -34,14 +33,14 @@ export const MessagesBoxFooter = () => {
     },
     onSubmit: async (values) => {
       const message = {
-        text: filterProfanity.clean(values.body.trim()),
+        text: profanityFilter.clean(values.body.trim()),
         author: getUsername(),
         channelId: currentChannelId,
       };
 
       try {
         await api.sendMessage(message);
-        dispatch(messagesActions.setHasAdd(true));
+        setHasMessageAdd(true);
         formik.resetForm();
       } catch (error) {
         toast.error(t('toasts.netWorkError'));

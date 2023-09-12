@@ -1,12 +1,13 @@
 /* eslint-disable import/prefer-default-export */
 import {
-  createContext, useContext, useEffect, useMemo,
+  createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
+import { fetchData } from '../store/slices/initSlice';
 import { channelsActions, messagesActions } from '../store/slices';
 import { routes } from '../routes';
 
@@ -15,6 +16,7 @@ const ApiContext = createContext({});
 export const ApiProvider = ({ children, socket }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     socket.connect();
@@ -55,29 +57,18 @@ export const ApiProvider = ({ children, socket }) => {
       });
     });
 
-    const markError = (func) => async (arg) => {
-      try {
-        return await func(arg);
-      } catch (error) {
-        error.isAPI = true;
-        throw error;
-      }
-    };
-
     return {
+      error,
+      setError,
       sendMessage: promisify((...args) => socket.emit('newMessage', ...args)),
       addChannel: promisify((...args) => socket.emit('newChannel', ...args)),
       removeChannel: promisify((...args) => socket.emit('removeChannel', ...args)),
       renameChannel: promisify((...args) => socket.emit('renameChannel', ...args)),
-      fetchData: markError((authHeader) => axios.get(routes.api.data, { headers: authHeader })),
-      logIn: markError(
-        (userData) => axios.post(routes.api.login, userData),
-      ),
-      signUp: markError(
-        (userData) => axios.post(routes.api.signup, userData),
-      ),
+      fetchData: (authHeader) => dispatch(fetchData(authHeader)).unwrap(),
+      logIn: (userData) => axios.post(routes.api.login, userData),
+      signUp: (userData) => axios.post(routes.api.signup, userData),
     };
-  }, [socket]);
+  }, [dispatch, error, socket]);
 
   return (
     <ApiContext.Provider value={providedData}>

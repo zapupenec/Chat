@@ -1,37 +1,35 @@
 /* eslint-disable import/prefer-default-export */
 import { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Nav } from 'react-bootstrap';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 
-import { channelsActions, channelsSelectors } from '../../../../store/slices';
+import { channelsSelectors } from '../../../../store/slices';
 import { Channel } from './Channel';
 
 export const ChannelsBoxBody = () => {
-  const channels = useSelector(channelsSelectors.selectAll);
-  const hasAdd = useSelector(channelsSelectors.selectHasAdd);
-  const isSwitchToDefault = useSelector(channelsSelectors.selectIsSwitchToDefault);
   const scrollbarsRef = useRef(null);
+  const channels = useSelector(channelsSelectors.selectAll);
 
-  const dispatch = useDispatch();
+  const currentChannelId = useSelector(channelsSelectors.selectCurrentChannelId);
+  const defaultChannelId = channels[0].id;
+  const lastChannelId = channels.at(-1).id;
+
   useEffect(() => {
-    if (isSwitchToDefault) {
+    if (currentChannelId === defaultChannelId) {
       scrollbarsRef.current.view.scroll({
         top: 0,
         behavior: 'smooth',
       });
-      dispatch(channelsActions.setIsSwitchToDefault(false));
     }
 
-    if (hasAdd) {
+    if (currentChannelId === lastChannelId) {
       scrollbarsRef.current.view.scroll({
         top: scrollbarsRef.current.getScrollHeight(),
         behavior: 'smooth',
       });
-      dispatch(channelsActions.setHasAdd(false));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [channels, isSwitchToDefault]);
+  }, [currentChannelId, defaultChannelId, lastChannelId]);
 
   return (
     <Scrollbars

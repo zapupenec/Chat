@@ -1,11 +1,11 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createEntityAdapter, createSelector } from '@reduxjs/toolkit';
 
+import { fetchData } from './initSlice';
 import { actions as channelsActions } from './channelsSlice.js';
 
 const messagesAdapter = createEntityAdapter();
 const initialState = messagesAdapter.getInitialState({
-  hasAdd: false,
   historyLength: 0,
 });
 
@@ -15,7 +15,6 @@ const messagesSlice = createSlice({
   reducers: {
     addMessages: messagesAdapter.addMany,
     addMessage: messagesAdapter.addOne,
-    setHasAdd: (state, { payload }) => { state.hasAdd = payload; },
     setHistoryLength: (state, { payload }) => { state.historyLength = payload; },
   },
   extraReducers: (builder) => {
@@ -24,12 +23,15 @@ const messagesSlice = createSlice({
         const channelId = action.payload;
         const restEntities = Object.values(state.entities).filter((e) => e.channelId !== channelId);
         messagesAdapter.setAll(state, restEntities);
+      })
+      .addCase(fetchData.fulfilled, (state, action) => {
+        const { messages } = action.payload;
+        messagesAdapter.addMany(state, messages);
       });
   },
 });
 
 const selectorsAdapter = messagesAdapter.getSelectors((state) => state.messages);
-const selectHasAdd = (state) => state.messages.hasAdd;
 const selectHistoryLength = (state) => state.messages.historyLength;
 
 const selectMessagesByChannelId = (id) => createSelector([
@@ -43,7 +45,6 @@ const selectMessagesByChannelId = (id) => createSelector([
 export const { actions } = messagesSlice;
 export const selectors = {
   ...selectorsAdapter,
-  selectHasAdd,
   selectHistoryLength,
   selectMessagesByChannelId,
 };

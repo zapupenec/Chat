@@ -1,7 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import { Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-
 import { Header } from './Header';
 
 export const Layout = () => (

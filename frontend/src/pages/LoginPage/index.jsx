@@ -1,19 +1,24 @@
 /* eslint-disable import/prefer-default-export */
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Container, Row, Col, Card, Form, FloatingLabel, Button, Image,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { useAuth } from '../../contexts';
+import { useAPI, useAuth } from '../../contexts';
 import loginImage from '../../assets/login.jpg';
 import { routes } from '../../routes';
 
 export const LoginPage = () => {
   const { t } = useTranslation();
-  const { isLogInFailed, logIn } = useAuth();
+
+  const { logIn } = useAuth();
+  const [isFailed, setIsFailed] = useState(false);
+
+  const api = useAPI();
+  const navigate = useNavigate();
 
   const inputRef = useRef(null);
 
@@ -22,10 +27,18 @@ export const LoginPage = () => {
       username: '',
       password: '',
     },
-    onSubmit: (values) => {
-      logIn(values, () => {
-        formik.setSubmitting(false);
-      });
+    onSubmit: async (values) => {
+      setIsFailed(false);
+      try {
+        await logIn(values);
+      } catch (error) {
+        if (error.response?.status === 401) {
+          setIsFailed(true);
+          return;
+        }
+        api.setError(error);
+        navigate(routes.pages.error);
+      }
     },
   });
 
@@ -55,7 +68,7 @@ export const LoginPage = () => {
                       value={formik.values.username}
                       onChange={formik.handleChange}
                       ref={inputRef}
-                      isInvalid={isLogInFailed}
+                      isInvalid={isFailed}
                     />
                   </FloatingLabel>
                   <FloatingLabel className="mb-4" controlId="password" label={t('loginPage.fields.password')}>
@@ -67,7 +80,7 @@ export const LoginPage = () => {
                       required
                       value={formik.values.password}
                       onChange={formik.handleChange}
-                      isInvalid={isLogInFailed}
+                      isInvalid={isFailed}
                     />
                     <Form.Control.Feedback type="invalid" tooltip>
                       {t('errors.login')}

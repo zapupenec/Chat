@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Container, Row, Col, Card, Form, FloatingLabel, Button, Image,
@@ -9,7 +9,7 @@ import {
 import { object, ref, string } from 'yup';
 
 import signupImage from '../../assets/signup.jpg';
-import { useAuth } from '../../contexts';
+import { useAPI, useAuth } from '../../contexts';
 import { routes } from '../../routes';
 
 const getSchema = () => {
@@ -30,7 +30,12 @@ const getSchema = () => {
 
 export const SignupPage = () => {
   const { t } = useTranslation();
-  const { isSignUpFailed, signUp } = useAuth();
+
+  const { signUp } = useAuth();
+  const [isFailed, setIsFailed] = useState(false);
+
+  const api = useAPI();
+  const navigate = useNavigate();
 
   const inputRef = useRef(null);
 
@@ -41,10 +46,18 @@ export const SignupPage = () => {
       confirmPassword: '',
     },
     validationSchema: getSchema(),
-    onSubmit: ({ username, password }) => {
-      signUp({ username, password }, () => {
-        formik.setSubmitting(false);
-      });
+    onSubmit: async ({ username, password }) => {
+      setIsFailed(false);
+      try {
+        await signUp({ username, password });
+      } catch (error) {
+        if (error.response?.status === 409) {
+          setIsFailed(true);
+          return;
+        }
+        api.setError(error);
+        navigate(routes.pages.error);
+      }
     },
   });
 
@@ -53,7 +66,7 @@ export const SignupPage = () => {
   }, [formik.isSubmitting]);
 
   const isValid = (fieldName) => (
-    (formik.touched[fieldName] && formik.errors[fieldName]) || isSignUpFailed
+    (formik.touched[fieldName] && formik.errors[fieldName]) || isFailed
   );
 
   return (
@@ -111,7 +124,7 @@ export const SignupPage = () => {
                       isInvalid={isValid('confirmPassword')}
                     />
                     <Form.Control.Feedback type="invalid" tooltip>
-                      {isSignUpFailed ? t('errors.signup') : t(formik.errors.confirmPassword)}
+                      {isFailed ? t('errors.signup') : t(formik.errors.confirmPassword)}
                     </Form.Control.Feedback>
                   </FloatingLabel>
                   <Button

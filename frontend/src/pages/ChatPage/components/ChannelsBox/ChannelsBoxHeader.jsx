@@ -10,8 +10,8 @@ export const ChannelsBoxHeader = () => {
   const { t } = useTranslation();
 
   const dispatch = useDispatch();
-  const showModal = (type) => () => {
-    dispatch(modalsActions.setTypeModal(type));
+  const handleClick = () => {
+    dispatch(modalsActions.openModal({ type: 'add' }));
   };
 
   return (
@@ -21,7 +21,7 @@ export const ChannelsBoxHeader = () => {
         type="button"
         variant="group-vertical"
         className="p-0 text-primary"
-        onClick={showModal('add')}
+        onClick={handleClick}
       >
         <Icon name="plus-square" size={20} />
         <span className="visually-hidden">{t('buttons.add')}</span>
