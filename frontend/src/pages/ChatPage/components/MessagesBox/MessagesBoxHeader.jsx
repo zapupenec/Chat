@@ -23,14 +23,14 @@ export const MessagesBoxHeader = ({ count, name }) => {
           </b>
         </p>
         <span className="text-muted">
-          {t('messagesBox.messagesCount', { count })}
+          {t('chatPage.messagesBox.messagesCount', { count })}
         </span>
       </div>
       <div>
         <InputGroup>
-          <InputGroup.Text>{t('messagesBox.history')}</InputGroup.Text>
+          <InputGroup.Text>{t('chatPage.messagesBox.history')}</InputGroup.Text>
           <Form.Select role="button" onChange={hanleSelect}>
-            <option value="0">{t('messagesBox.noLimit')}</option>
+            <option value="0">{t('chatPage.messagesBox.noLimit')}</option>
             <option value="50">50</option>
             <option value="100">100</option>
             <option value="150">150</option>

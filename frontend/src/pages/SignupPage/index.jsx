@@ -1,15 +1,16 @@
 /* eslint-disable import/prefer-default-export */
 import { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Container, Row, Col, Card, Form, FloatingLabel, Button, Image,
 } from 'react-bootstrap';
 import { object, ref, string } from 'yup';
+import { toast } from 'react-toastify';
 
 import signupImage from '../../assets/signup.jpg';
-import { useAPI, useAuth } from '../../contexts';
+import { useAuth } from '../../contexts';
 import { routes } from '../../routes';
 
 const getSchema = () => {
@@ -34,9 +35,6 @@ export const SignupPage = () => {
   const { signUp } = useAuth();
   const [isFailed, setIsFailed] = useState(false);
 
-  const api = useAPI();
-  const navigate = useNavigate();
-
   const inputRef = useRef(null);
 
   const formik = useFormik({
@@ -55,8 +53,7 @@ export const SignupPage = () => {
           setIsFailed(true);
           return;
         }
-        api.setError(error);
-        navigate(routes.pages.error);
+        toast.error(t('toasts.netWorkError'));
       }
     },
   });

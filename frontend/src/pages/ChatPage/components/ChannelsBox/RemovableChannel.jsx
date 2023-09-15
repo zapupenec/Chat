@@ -48,7 +48,7 @@ export const RemovableChannel = ({ channel, handleClickChannel }) => {
         className={classNameToggle}
         id={`dropdown-chanel-${name}`}
       >
-        <span className="visually-hidden">{t('channelsBox.managementChannel')}</span>
+        <span className="visually-hidden">{t('chatPage.channelsBox.managementChannel')}</span>
       </Dropdown.Toggle>
       <Dropdown.Menu>
         <Dropdown.Item as={Button} onClick={showModal('remove')}>{t('buttons.remove')}</Dropdown.Item>

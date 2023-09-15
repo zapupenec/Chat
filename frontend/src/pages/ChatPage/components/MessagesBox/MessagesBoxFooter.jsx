@@ -57,8 +57,8 @@ export const MessagesBoxFooter = ({ setHasMessageAdd }) => {
       >
         <InputGroup>
           <Form.Control
-            placeholder={t('messagesBox.placeholder')}
-            aria-label={t('messagesBox.nemMessage')}
+            placeholder={t('chatPage.messagesBox.placeholder')}
+            aria-label={t('chatPage.messagesBox.nemMessage')}
             aria-describedby="send-new-message"
             className="border-0 p-0 ps-2"
             name="body"

@@ -4,13 +4,8 @@ export const ru = {
     languages: {
       ru: 'Русский',
     },
-    Loading: 'Загрузка',
     header: {
       logo: 'Hexlet Chat',
-    },
-    channelsBox: {
-      title: 'Каналы',
-      managementChannel: 'Управление каналом',
     },
     modals: {
       channelName: 'Имя канала',
@@ -19,17 +14,22 @@ export const ru = {
       rename: 'Переименовать канал',
       remove: 'Удалить канал',
     },
-    messagesBox: {
-      messagesCount_one: '{{count}} сообщение',
-      messagesCount_few: '{{count}} сообщения',
-      messagesCount_many: '{{count}} сообщений',
-      nemMessage: 'Новое сообщение',
-      placeholder: 'Введите сообщение...',
-      history: 'История',
-      noLimit: 'б/о',
-    },
-    errorPage: {
-      title: 'Упс! Что-пошло не так =(',
+    chatPage: {
+      messagesBox: {
+        messagesCount_one: '{{count}} сообщение',
+        messagesCount_few: '{{count}} сообщения',
+        messagesCount_many: '{{count}} сообщений',
+        nemMessage: 'Новое сообщение',
+        placeholder: 'Введите сообщение...',
+        history: 'История',
+        noLimit: 'б/о',
+      },
+      channelsBox: {
+        title: 'Каналы',
+        managementChannel: 'Управление каналом',
+      },
+      loading: 'Загрузка',
+      error: 'Упс! Что-пошло не так =(',
     },
     notFoundPage: {
       title: 'Страница не найдена',

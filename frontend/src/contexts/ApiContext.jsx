@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import {
-  createContext, useContext, useEffect, useMemo, useState,
+  createContext, useContext, useEffect, useMemo,
 } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,6 @@ const ApiContext = createContext({});
 export const ApiProvider = ({ children, socket }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     socket.connect();
@@ -58,8 +57,6 @@ export const ApiProvider = ({ children, socket }) => {
     });
 
     return {
-      error,
-      setError,
       sendMessage: promisify((...args) => socket.emit('newMessage', ...args)),
       addChannel: promisify((...args) => socket.emit('newChannel', ...args)),
       removeChannel: promisify((...args) => socket.emit('removeChannel', ...args)),
@@ -68,7 +65,7 @@ export const ApiProvider = ({ children, socket }) => {
       logIn: (userData) => axios.post(routes.api.login, userData),
       signUp: (userData) => axios.post(routes.api.signup, userData),
     };
-  }, [dispatch, error, socket]);
+  }, [dispatch, socket]);
 
   return (
     <ApiContext.Provider value={providedData}>

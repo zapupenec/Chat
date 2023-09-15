@@ -10,7 +10,7 @@ export const Loading = () => {
       <Row className="justify-content-center align-content-center h-100">
         <Spinner animation="border" variant="primary" role="status">
           <span className="visually-hidden">
-            {`${t('Loading')}...`}
+            {`${t('chatPage.loading')}...`}
           </span>
         </Spinner>
       </Row>

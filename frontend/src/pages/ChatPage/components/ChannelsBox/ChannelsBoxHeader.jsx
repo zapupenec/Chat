@@ -21,7 +21,7 @@ export const ChannelsBoxHeader = () => {
 
   return (
     <div className="d-flex justify-content-between mt-1 mb-2 py-4 ps-4 pe-2">
-      <b>{t('channelsBox.title')}</b>
+      <b>{t('chatPage.channelsBox.title')}</b>
       <Button
         type="button"
         variant="group-vertical"
