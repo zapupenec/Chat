@@ -55,13 +55,14 @@ export const MessagesBoxFooter = ({ setHasMessageAdd }) => {
         className="py-1 border rounded-2"
         onSubmit={formik.handleSubmit}
       >
-        <InputGroup hasValidation>
+        <InputGroup>
           <Form.Control
             placeholder={t('messagesBox.placeholder')}
             aria-label={t('messagesBox.nemMessage')}
             aria-describedby="send-new-message"
             className="border-0 p-0 ps-2"
             name="body"
+            type="text"
             ref={inputRef}
             value={formik.values.body}
             onChange={formik.handleChange}
@@ -71,7 +72,7 @@ export const MessagesBoxFooter = ({ setHasMessageAdd }) => {
             variant=""
             type="submit"
             id="send-new-message"
-            className="btn-group-vertical"
+            className="btn-light btn-group-vertical"
             disabled={formik.values.body.trim() === '' || formik.isSubmitting}
           >
             <Icon name="arrow-right-square" size={20} />

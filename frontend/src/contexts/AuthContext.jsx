@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import {
-  createContext, useContext, useMemo, useState,
+  createContext, useContext, useEffect, useMemo, useState,
 } from 'react';
 
 import { useAPI } from './ApiContext';
@@ -9,8 +9,14 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const currentUser = JSON.parse(localStorage.getItem('user'));
-  const [user, setUser] = useState(currentUser?.username || null);
+  const [user, setUser] = useState(null);
   const api = useAPI();
+
+  useEffect(() => {
+    if (currentUser) {
+      setUser(currentUser.username);
+    }
+  }, [currentUser]);
 
   const providedData = useMemo(() => {
     const handleAPI = (func) => async (userData) => {

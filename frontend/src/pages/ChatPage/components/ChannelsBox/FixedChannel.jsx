@@ -8,10 +8,20 @@ export const FixedChannel = ({ channel, handleClickChannel }) => {
   const { id, name } = channel;
   const currentChannelId = useSelector(channelsSelectors.selectCurrentChannelId);
 
+  const className = [
+    'btn',
+    'btn-secondary',
+    `${currentChannelId === id ? '' : 'btn-light'}`,
+    'rounded-0',
+    'w-100',
+    'text-start',
+    'd-block',
+    'text-truncate',
+  ].join(' ');
+
   return (
     <Button
-      variant={currentChannelId === id ? 'secondary' : 'secondary-outline'}
-      className="rounded-0 w-100 text-start d-block text-truncate"
+      className={className}
       onClick={handleClickChannel(id)}
     >
       <span className="me-1">#</span>

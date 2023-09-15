@@ -6,6 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { Icon } from '../../../../common-components';
 import { modalsActions } from '../../../../store/slices';
 
+const className = [
+  'p-0',
+  'text-primary',
+].join(' ');
+
 export const ChannelsBoxHeader = () => {
   const { t } = useTranslation();
 
@@ -20,7 +25,7 @@ export const ChannelsBoxHeader = () => {
       <Button
         type="button"
         variant="group-vertical"
-        className="p-0 text-primary"
+        className={className}
         onClick={handleClick}
       >
         <Icon name="plus-square" size={20} />

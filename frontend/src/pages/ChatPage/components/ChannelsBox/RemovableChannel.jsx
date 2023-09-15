@@ -17,11 +17,27 @@ export const RemovableChannel = ({ channel, handleClickChannel }) => {
     dispatch(modalsActions.openModal({ type, channelId: id }));
   };
 
+  const className = [
+    'btn',
+    'btn-secondary',
+    `${currentChannelId === id ? '' : 'btn-light'}`,
+    'rounded-0',
+    'w-100',
+    'text-start',
+    'd-block',
+    'text-truncate',
+  ].join(' ');
+
+  const classNameToggle = [
+    'btn',
+    'btn-secondary',
+    `${currentChannelId === id ? '' : 'btn-light'}`,
+  ].join(' ');
+
   return (
     <Dropdown key={id} as={ButtonGroup} className="w-100">
       <Button
-        variant={currentChannelId === id ? 'secondary' : ''}
-        className="rounded-0 text-start d-block text-truncate w-100"
+        className={className}
         onClick={handleClickChannel(id)}
       >
         <span className="me-1">#</span>
@@ -29,7 +45,7 @@ export const RemovableChannel = ({ channel, handleClickChannel }) => {
       </Button>
       <Dropdown.Toggle
         split
-        variant={currentChannelId === id ? 'secondary' : ''}
+        className={classNameToggle}
         id={`dropdown-chanel-${name}`}
       >
         <span className="visually-hidden">{t('channelsBox.managementChannel')}</span>

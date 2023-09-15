@@ -29,7 +29,7 @@ export const MessagesBoxHeader = ({ count, name }) => {
       <div>
         <InputGroup>
           <InputGroup.Text>{t('messagesBox.history')}</InputGroup.Text>
-          <Form.Select onChange={hanleSelect}>
+          <Form.Select role="button" onChange={hanleSelect}>
             <option value="0">{t('messagesBox.noLimit')}</option>
             <option value="50">50</option>
             <option value="100">100</option>
