@@ -1,9 +1,9 @@
-[![Actions Status](https://github.com/zapupenec/frontend-project-12/workflows/hexlet-check/badge.svg)](https://github.com/zapupenec/frontend-project-12/actions)
-[![Maintainability](https://api.codeclimate.com/v1/badges/c7eace0d66aa98bd001c/maintainability)](https://codeclimate.com/github/zapupenec/frontend-project-12/maintainability)
+[![Actions Status](https://github.com/zapupenec/Chat/workflows/hexlet-check/badge.svg)](https://github.com/zapupenec/Chat/actions)
+[![Maintainability](https://api.codeclimate.com/v1/badges/069c28377c83cdaed29f/maintainability)](https://codeclimate.com/github/zapupenec/Chat/maintainability)
 
-EN | [RU](https://github.com/zapupenec/frontend-project-12/blob/main/README-ru.md)
+EN | [RU](https://github.com/zapupenec/Chat/blob/main/README-ru.md)
 
-# [Сhat](https://frontend-project-12-zapupenec.up.railway.app)
+# [Сhat](https://chat-zapupenec.up.railway.app)
 Single page application. Simple chat with the ability to create, rename and delete channels.
 
 ![screenshot-ru](/images/chat.png)
@@ -63,7 +63,7 @@ Developed using Node.js v20.4.0.
 
 Clone the repository locally.
 ```
-git clone https://github.com/zapupenec/frontend-project-12.git
+git clone https://github.com/zapupenec/Chat.git
 ```
 Install the dependencies.
 ```

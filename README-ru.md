@@ -1,9 +1,9 @@
-[![Actions Status](https://github.com/zapupenec/frontend-project-12/workflows/hexlet-check/badge.svg)](https://github.com/zapupenec/frontend-project-12/actions)
-[![Maintainability](https://api.codeclimate.com/v1/badges/c7eace0d66aa98bd001c/maintainability)](https://codeclimate.com/github/zapupenec/frontend-project-12/maintainability)
+[![Actions Status](https://github.com/zapupenec/Chat/workflows/hexlet-check/badge.svg)](https://github.com/zapupenec/Chat/actions)
+[![Maintainability](https://api.codeclimate.com/v1/badges/069c28377c83cdaed29f/maintainability)](https://codeclimate.com/github/zapupenec/Chat/maintainability)
 
-[EN](https://github.com/zapupenec/frontend-project-12) | RU
+[EN](https://github.com/zapupenec/Chat) | RU
 
-# [Чат](https://frontend-project-12-zapupenec.up.railway.app)
+# [Чат](https://chat-zapupenec.up.railway.app)
 Одностраничное приложение. Простой чат с возможностью создавать, переименовывать и удалять каналы.
 
 ![screenshot-ru](/images/chat.png)
@@ -63,7 +63,7 @@
 
 Скопируйте репозиторий локально.
 ```
-git clone https://github.com/zapupenec/frontend-project-12.git
+git clone https://github.com/zapupenec/Chat.git
 ```
 Установите зависимости.
 ```
