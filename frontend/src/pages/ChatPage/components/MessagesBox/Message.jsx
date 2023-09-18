@@ -10,10 +10,10 @@ export const Message = memo(({ message }) => {
   const className = [
     'text-break',
     'mb-2',
+    'text-light',
     `${user === author ? 'text-end' : 'text-start'}`,
-    `${user === author ? 'text-light' : ''}`,
     `${user === author ? 'align-self-end' : 'align-self-start'}`,
-    `${user === author ? 'bg-primary' : 'bg-light'}`,
+    `${user === author ? 'bg-primary' : 'bg-secondary'}`,
     'rounded-3',
     'p-2',
     'w-75',

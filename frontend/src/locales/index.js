@@ -1,7 +1,8 @@
 /* eslint-disable import/prefer-default-export */
+import { en } from './en';
 import { ru } from './ru';
 
-export const resources = { ru };
+export const resources = { en, ru };
 
 export const locale = {
   string: {

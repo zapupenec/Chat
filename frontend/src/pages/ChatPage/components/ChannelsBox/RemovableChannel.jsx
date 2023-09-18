@@ -39,7 +39,7 @@ export const RemovableChannel = ({
   ].join(' ');
 
   return (
-    <Dropdown key={id} as={ButtonGroup} className="w-100">
+    <Dropdown as={ButtonGroup} className="w-100">
       <Button
         className={className}
         onClick={handleClickChannel(id)}

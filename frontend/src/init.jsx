@@ -16,11 +16,12 @@ export const init = () => {
   profanityFilter.add(profanityFilter.getDictionary('fr'));
   profanityFilter.add(profanityFilter.getDictionary('ru'));
 
+  const lastSelectedLng = localStorage.getItem('lastSelectedLng');
   i18next
     .use(initReactI18next)
     .init({
       resources,
-      fallbackLng: 'ru',
+      fallbackLng: lastSelectedLng || 'ru',
       interpolation: {
         escapeValue: false,
       },

@@ -6,7 +6,7 @@
 # [Чат](https://chat-zapupenec.up.railway.app)
 Одностраничное приложение. Простой чат с возможностью создавать, переименовывать и удалять каналы.
 
-![screenshot-ru](/images/chat.png)
+![screenshot-ru](/images/chat-ru.png)
 
 <p>
   <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer">

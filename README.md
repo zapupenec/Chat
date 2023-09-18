@@ -6,7 +6,7 @@ EN | [RU](https://github.com/zapupenec/Chat/blob/main/README-ru.md)
 # [Сhat](https://chat-zapupenec.up.railway.app)
 Single page application. Simple chat with the ability to create, rename and delete channels.
 
-![screenshot-ru](/images/chat.png)
+![screenshot-ru](/images/chat-en.png)
 
 <p>
   <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer">

@@ -2,10 +2,15 @@
 export const ru = {
   translation: {
     languages: {
+      en: 'English',
       ru: 'Русский',
     },
     header: {
       logo: 'Hexlet Chat',
+    },
+    footer: {
+      createdBy: 'создано',
+      basedOnProject: 'на основе проекта',
     },
     modals: {
       channelName: 'Имя канала',
