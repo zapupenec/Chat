@@ -1,11 +1,11 @@
 import { ChannelsBox } from './ChannelsBox';
-import { Error } from './Error';
+import { ErrorComponent } from './ErrorComponent';
 import { MessagesBox } from './MessagesBox';
 import { Loading } from './Loading';
 
 export {
   ChannelsBox,
-  Error,
+  ErrorComponent,
   MessagesBox,
   Loading,
 };

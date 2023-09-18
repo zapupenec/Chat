@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 
 import { Icon } from '../../../../common-components';
 
-export const Error = () => {
+export const ErrorComponent = () => {
   const { t } = useTranslation();
 
   const handleClick = () => {

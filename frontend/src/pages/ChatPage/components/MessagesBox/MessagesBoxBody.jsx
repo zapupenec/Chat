@@ -34,7 +34,7 @@ export const MessagesBoxBody = ({ messages, hasMessageAdd, setHasMessageAdd }) =
       onScroll={handleScroll}
       ref={scrollbarsRef}
     >
-      <div id="messages-box" className="px-5">
+      <div id="messages-box" className="d-flex flex-column px-5">
         {messages.map((message) => <Message key={message.id} message={message} />)}
       </div>
     </Scrollbars>

@@ -7,8 +7,18 @@ export const Message = memo(({ message }) => {
   const { user } = useAuth();
   const { author, text, id } = message;
 
+  const className = [
+    'text-break',
+    'mb-2',
+    `${user === author ? 'text-end' : 'text-start'}`,
+    `${user === author ? 'align-self-end' : 'align-self-start'}`,
+    `${user === author ? 'bg-info' : 'bg-light'}`,
+    'rounded-3',
+    'p-2',
+  ].join(' ');
+
   return (
-    <div key={id} className={`text-break mb-2$ ${user === author ? 'text-end' : 'text-start'}`}>
+    <div key={id} className={className}>
       <b>{author}</b>
       {`: ${text}`}
     </div>
