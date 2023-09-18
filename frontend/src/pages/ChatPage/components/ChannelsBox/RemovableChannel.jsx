@@ -5,9 +5,12 @@ import {
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+import { Badge } from './Badge';
 import { channelsSelectors, modalsActions } from '../../../../store/slices';
 
-export const RemovableChannel = ({ channel, handleClickChannel }) => {
+export const RemovableChannel = ({
+  channel, handleClickChannel, newMessagesCount,
+}) => {
   const { t } = useTranslation();
   const { id, name } = channel;
   const currentChannelId = useSelector(channelsSelectors.selectCurrentChannelId);
@@ -26,6 +29,7 @@ export const RemovableChannel = ({ channel, handleClickChannel }) => {
     'text-start',
     'd-block',
     'text-truncate',
+    'position-relative',
   ].join(' ');
 
   const classNameToggle = [
@@ -42,6 +46,7 @@ export const RemovableChannel = ({ channel, handleClickChannel }) => {
       >
         <span className="me-1">#</span>
         {name}
+        {currentChannelId !== id && <Badge newMessagesCount={newMessagesCount} />}
       </Button>
       <Dropdown.Toggle
         split

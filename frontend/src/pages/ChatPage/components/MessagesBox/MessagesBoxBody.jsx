@@ -16,7 +16,7 @@ export const MessagesBoxBody = ({ messages, hasMessageAdd, setHasMessageAdd }) =
 
   const handleScroll = () => {
     const { scrollHeight, scrollTop, clientHeight } = scrollbarsRef.current.getValues();
-    if (Math.abs(scrollHeight - scrollTop - clientHeight) < 15) {
+    if (Math.abs(scrollHeight - scrollTop - clientHeight) < 50) {
       setIsAutoScroll(true);
     } else {
       setIsAutoScroll(false);
@@ -40,10 +40,9 @@ export const MessagesBoxBody = ({ messages, hasMessageAdd, setHasMessageAdd }) =
       setHasMessageAdd(false);
     }
     const { scrollHeight, clientHeight } = scrollbarsRef.current.getValues();
-    setIsCrowded(scrollHeight > clientHeight);
+    setIsCrowded(scrollHeight - clientHeight > 0);
   }, [messages.length, hasMessageAdd, isAutoScroll, setHasMessageAdd]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   return (
     <div className="messages-box-body w-100 h-100">
       <Scrollbars

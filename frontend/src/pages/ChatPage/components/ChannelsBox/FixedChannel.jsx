@@ -3,8 +3,11 @@ import { useSelector } from 'react-redux';
 import { Button } from 'react-bootstrap';
 
 import { channelsSelectors } from '../../../../store/slices';
+import { Badge } from './Badge';
 
-export const FixedChannel = ({ channel, handleClickChannel }) => {
+export const FixedChannel = ({
+  channel, handleClickChannel, newMessagesCount,
+}) => {
   const { id, name } = channel;
   const currentChannelId = useSelector(channelsSelectors.selectCurrentChannelId);
 
@@ -17,6 +20,7 @@ export const FixedChannel = ({ channel, handleClickChannel }) => {
     'text-start',
     'd-block',
     'text-truncate',
+    'position-relative',
   ].join(' ');
 
   return (
@@ -26,6 +30,7 @@ export const FixedChannel = ({ channel, handleClickChannel }) => {
     >
       <span className="me-1">#</span>
       {name}
+      {currentChannelId !== id && <Badge newMessagesCount={newMessagesCount} />}
     </Button>
   );
 };

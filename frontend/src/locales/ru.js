@@ -27,6 +27,9 @@ export const ru = {
       channelsBox: {
         title: 'Каналы',
         managementChannel: 'Управление каналом',
+        unreadMessages_one: '{{count}} непрочитанное сообщение',
+        unreadMessages_few: '{{count}} непрочитанных сообщения',
+        unreadMessages_many: '{{count}} непрочитанных сообщений',
       },
       loading: 'Загрузка',
       error: 'Упс! Что-пошло не так =(',
