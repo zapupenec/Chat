@@ -15,6 +15,7 @@ export const Message = memo(({ message }) => {
     `${user === author ? 'bg-info' : 'bg-light'}`,
     'rounded-3',
     'p-2',
+    'w-75',
   ].join(' ');
 
   return (

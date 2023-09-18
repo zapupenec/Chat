@@ -69,10 +69,10 @@ export const MessagesBoxFooter = ({ setHasMessageAdd }) => {
             disabled={formik.isSubmitting}
           />
           <Button
-            variant=""
+            variant="primary"
             type="submit"
             id="send-new-message"
-            className="btn-light btn-group-vertical"
+            className="border-0 bg-transparent text-dark d-flex align-content-center justify-items-center"
             disabled={formik.values.body.trim() === '' || formik.isSubmitting}
           >
             <Icon name="arrow-right-square" size={20} />

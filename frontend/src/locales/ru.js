@@ -65,6 +65,7 @@ export const ru = {
       remove: 'Удалить',
       rename: 'Переименовать',
       refresh: 'Обновить страницу',
+      scrollToBottom: 'Прокрутить вниз',
     },
     errors: {
       usernameLength: 'От 3 до 20 символов',
