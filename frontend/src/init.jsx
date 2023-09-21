@@ -17,7 +17,9 @@ export const init = () => {
   profanityFilter.add(profanityFilter.getDictionary('ru'));
 
   const lastSelectedLng = localStorage.getItem('lastSelectedLng');
-  i18next
+
+  const i18n = i18next.createInstance();
+  i18n
     .use(initReactI18next)
     .init({
       resources,
@@ -43,7 +45,7 @@ export const init = () => {
   return (
     <RollbarProvider config={rollbarConfig}>
       <ErrorBoundary>
-        <I18nextProvider i18n={i18next}>
+        <I18nextProvider i18n={i18n}>
           <ReduxProvider store={store}>
             <ApiProvider socket={socket}>
               <AuthProvider>

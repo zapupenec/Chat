@@ -44,7 +44,8 @@ export const ApiProvider = ({ children, socket }) => {
       socket.offAny();
       socket.disconnect();
     };
-  }, [dispatch, socket, t]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const providedData = useMemo(() => {
     const promisify = (func) => (...args) => new Promise((resolve, reject) => {

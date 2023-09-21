@@ -32,7 +32,8 @@ export const ChatPage = () => {
     };
 
     fetch();
-  }, [api, getAuthHeader, logOut, t]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (loadingStatus === 'loading') {
     return <Loading />;
